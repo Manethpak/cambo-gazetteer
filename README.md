@@ -1,90 +1,75 @@
-# React + Vite + Hono + Cloudflare Workers
+# Cambodia Gazetteer - Geographical Index Open API
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/vite-react-template)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This template provides a minimal setup for building a React application with TypeScript and Vite, designed to run on Cloudflare Workers. It features hot module replacement, ESLint integration, and the flexibility of Workers deployments.
+A comprehensive Open API for Cambodia's geographical data, providing easy access to information about provinces, districts, communes, and villages.
 
-![React + TypeScript + Vite + Cloudflare Workers](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/fc7b4b62-442b-4769-641b-ad4422d74300/public)
+## 📋 Description
 
-<!-- dash-content-start -->
+This project provides a RESTful API for accessing Cambodia's geographical gazetteer data. Built with modern web technologies, it offers a fast and reliable way to query administrative divisions and geographical information across Cambodia.
 
-🚀 Supercharge your web development with this powerful stack:
+## 🚀 Features
 
-- [**React**](https://react.dev/) - A modern UI library for building interactive interfaces
-- [**Vite**](https://vite.dev/) - Lightning-fast build tooling and development server
-- [**Hono**](https://hono.dev/) - Ultralight, modern backend framework
-- [**Cloudflare Workers**](https://developers.cloudflare.com/workers/) - Edge computing platform for global deployment
+- RESTful API for Cambodia's geographical data
+- Fast and lightweight using Hono framework
+- Built with Bun for optimal performance
+- TypeScript for type safety
+- Open source and free to use
 
-### ✨ Key Features
-
-- 🔥 Hot Module Replacement (HMR) for rapid development
-- 📦 TypeScript support out of the box
-- 🛠️ ESLint configuration included
-- ⚡ Zero-config deployment to Cloudflare's global network
-- 🎯 API routes with Hono's elegant routing
-- 🔄 Full-stack development setup
-- 🔎 Built-in Observability to monitor your Worker
-
-Get started in minutes with local development or deploy directly via the Cloudflare dashboard. Perfect for building modern, performant web applications at the edge.
-
-<!-- dash-content-end -->
-
-## Getting Started
-
-To start a new project with this template, run:
+## 📦 Installation
 
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/vite-react-template
+# Clone the repository
+git clone https://github.com/manethpak/cambo-geo-index.git
+cd cambo-geo-index
+
+# Install dependencies
+pnpm install
 ```
 
-A live deployment of this template is available at:
-[https://react-vite-template.templates.workers.dev](https://react-vite-template.templates.workers.dev)
+## 🛠️ Usage
 
-## Development
-
-Install dependencies:
+### Development
 
 ```bash
-npm install
+# Run in development mode with hot reload
+pnpm run dev
 ```
 
-Start the development server with:
+### Production
 
 ```bash
-npm run dev
+# Build the project
+pnpm run build
+
+# Start the server
+pnpm run start
 ```
 
-Your application will be available at [http://localhost:5173](http://localhost:5173).
-
-## Production
-
-Build your project for production:
+### Linting and Formatting
 
 ```bash
-npm run build
+# Lint code
+pnpm run lint
+
+# Format code
+pnpm run format
 ```
 
-Preview your build locally:
+## 📊 Data Sources
 
-```bash
-npm run preview
-```
+Read more about the data sources used in this project in the [Data Sources](source/README.md) document.
 
-Deploy your project to Cloudflare Workers:
+## 📝 License
 
-```bash
-npm run build && npm run deploy
-```
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-Monitor your workers:
+## 🤝 Contributing
 
-```bash
-npx wrangler tail
-```
+Contributions, issues, and feature requests are welcome!
 
-## Additional Resources
+Feel free to check the [issues page](https://github.com/manethpak/cambo-geo-index/issues).
 
-- [Cloudflare Workers Documentation](https://developers.cloudflare.com/workers/)
-- [Vite Documentation](https://vitejs.dev/guide/)
-- [React Documentation](https://reactjs.org/)
-- [Hono Documentation](https://hono.dev/)
+## ⭐ Show your support
+
+Give a ⭐️ if this project helped you!
