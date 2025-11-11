@@ -16,8 +16,9 @@
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "lint": "eslint",
-    "format": "oxfmt ./src",
-    "preview": "npm run build && vite preview"
+    "format": "oxfmt '!**/*.{ts,tsx,js,jsx}'",
+    "preview": "npm run build && vite preview",
+    "etl": "tsx data/etl.ts"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
@@ -39,10 +40,12 @@
     "eslint-plugin-react-refresh": "0.4.20",
     "globals": "16.2.0",
     "oxfmt": "^0.13.0",
+    "tsx": "^4.20.6",
     "typescript": "5.8.3",
     "typescript-eslint": "8.35.0",
     "vite": "^6.4.1",
-    "wrangler": "4.46.0"
+    "wrangler": "4.46.0",
+    "xlsx": "^0.18.5"
   },
   "keywords": [
     "cambodia",

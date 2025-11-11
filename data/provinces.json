@@ -1,0 +1,152 @@
+[
+  {
+    "code": "01",
+    "name_km": "បន្ទាយមានជ័យ",
+    "name_en": "Banteay Meanchey",
+    "type": "province"
+  },
+  {
+    "code": "02",
+    "name_km": "បាត់ដំបង",
+    "name_en": "Battambang",
+    "type": "province"
+  },
+  {
+    "code": "03",
+    "name_km": "កំពង់ចាម",
+    "name_en": "Kampong Cham",
+    "type": "province"
+  },
+  {
+    "code": "04",
+    "name_km": "កំពង់ឆ្នាំង",
+    "name_en": "Kampong Chhnang",
+    "type": "province"
+  },
+  {
+    "code": "05",
+    "name_km": "កំពង់ស្ពឺ",
+    "name_en": "Kampong Speu",
+    "type": "province"
+  },
+  {
+    "code": "06",
+    "name_km": "កំពង់ធំ",
+    "name_en": "Kampong Thom",
+    "type": "province"
+  },
+  {
+    "code": "07",
+    "name_km": "កំពត",
+    "name_en": "Kampot",
+    "type": "province"
+  },
+  {
+    "code": "08",
+    "name_km": "កណ្ដាល",
+    "name_en": "Kandal",
+    "type": "province"
+  },
+  {
+    "code": "09",
+    "name_km": "កោះកុង",
+    "name_en": "Koh Kong",
+    "type": "province"
+  },
+  {
+    "code": "10",
+    "name_km": "ក្រចេះ",
+    "name_en": "Kratie",
+    "type": "province"
+  },
+  {
+    "code": "11",
+    "name_km": "មណ្ឌលគីរី",
+    "name_en": "Mondulkiri",
+    "type": "province"
+  },
+  {
+    "code": "12",
+    "name_km": "ភ្នំពេញ",
+    "name_en": "Phnom Penh",
+    "type": "municipality"
+  },
+  {
+    "code": "13",
+    "name_km": "ព្រះវិហារ",
+    "name_en": "Preah Vihear",
+    "type": "province"
+  },
+  {
+    "code": "14",
+    "name_km": "ព្រៃវែង",
+    "name_en": "Prey Veng",
+    "type": "province"
+  },
+  {
+    "code": "15",
+    "name_km": "ពោធិ៍សាត់",
+    "name_en": "Pursat",
+    "type": "province"
+  },
+  {
+    "code": "16",
+    "name_km": "រតនគិរី",
+    "name_en": "Ratanakiri",
+    "type": "province"
+  },
+  {
+    "code": "17",
+    "name_km": "សៀមរាប",
+    "name_en": "Siem Reap",
+    "type": "province"
+  },
+  {
+    "code": "18",
+    "name_km": "ព្រះសីហនុ",
+    "name_en": "Preah Sihanouk",
+    "type": "province"
+  },
+  {
+    "code": "19",
+    "name_km": "ស្ទឹងត្រែង",
+    "name_en": "Stung Treng",
+    "type": "province"
+  },
+  {
+    "code": "20",
+    "name_km": "ស្វាយរៀង",
+    "name_en": "Svay Rieng",
+    "type": "province"
+  },
+  {
+    "code": "21",
+    "name_km": "តាកែវ",
+    "name_en": "Takeo",
+    "type": "province"
+  },
+  {
+    "code": "22",
+    "name_km": "ឧត្តរមានជ័យ",
+    "name_en": "Oddar Meanchey",
+    "type": "province"
+  },
+  {
+    "code": "23",
+    "name_km": "កែប",
+    "name_en": "Kep",
+    "type": "municipality"
+  },
+  {
+    "code": "24",
+    "name_km": "ប៉ៃលិន",
+    "name_en": "Pailin",
+    "type": "municipality"
+  },
+  {
+    "code": "25",
+    "name_km": "ត្បូងឃ្មុំ",
+    "name_en": "Tboung Khmum",
+    "type": "province"
+  }
+]
