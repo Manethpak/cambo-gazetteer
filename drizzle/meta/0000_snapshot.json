@@ -1,0 +1,151 @@
+{
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "61c634de-d7e9-4fa1-ac26-bcc840579ca8",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "administrative_units": {
+      "name": "administrative_units",
+      "columns": {
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name_km": {
+          "name": "name_km",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name_en": {
+          "name": "name_en",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "type": {
+          "name": "type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "parent_code": {
+          "name": "parent_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "reference": {
+          "name": "reference",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "official_note": {
+          "name": "official_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "checker_note": {
+          "name": "checker_note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "type_idx": {
+          "name": "type_idx",
+          "columns": [
+            "type"
+          ],
+          "isUnique": false
+        },
+        "parent_code_idx": {
+          "name": "parent_code_idx",
+          "columns": [
+            "parent_code"
+          ],
+          "isUnique": false
+        },
+        "type_parent_idx": {
+          "name": "type_parent_idx",
+          "columns": [
+            "type",
+            "parent_code"
+          ],
+          "isUnique": false
+        },
+        "name_en_idx": {
+          "name": "name_en_idx",
+          "columns": [
+            "name_en"
+          ],
+          "isUnique": false
+        },
+        "name_km_idx": {
+          "name": "name_km_idx",
+          "columns": [
+            "name_km"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "administrative_units_parent_code_administrative_units_code_fk": {
+          "name": "administrative_units_parent_code_administrative_units_code_fk",
+          "tableFrom": "administrative_units",
+          "tableTo": "administrative_units",
+          "columnsFrom": [
+            "parent_code"
+          ],
+          "columnsTo": [
+            "code"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
+}
