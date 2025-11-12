@@ -127,14 +127,14 @@ export function buildBreadcrumb(ancestors: any[], current: any) {
   return [
     ...ancestors.map((a) => ({
       code: a.code,
-      name_km: a.name_km,
-      name_en: a.name_en,
+      nameKm: a.name_km || a.nameKm,
+      nameEn: a.name_en || a.nameEn,
       type: a.type,
     })),
     {
       code: current.code,
-      name_km: current.name_km,
-      name_en: current.name_en,
+      nameKm: current.name_km || current.nameKm,
+      nameEn: current.name_en || current.nameEn,
       type: current.type,
     },
   ];
@@ -246,7 +246,7 @@ export async function searchWithHierarchy(db: any, query: string, limit = 20) {
       return {
         ...result,
         breadcrumb,
-        path: breadcrumb.map((b) => b.name_en).join(" > "),
+        path: breadcrumb.map((b) => b.nameEn).join(" > "),
       };
     })
   );

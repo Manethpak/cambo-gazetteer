@@ -8,9 +8,7 @@
     "node": ">=20.0.0"
   },
   "scripts": {
-    "dev:app": "vite --port 5173",
-    "dev:api": "wrangler dev --port 8787",
-    "dev": "concurrently pnpm:dev:api pnpm:dev:app",
+    "dev": "vite",
     "build": "tsc -b && vite build",
     "cf-typegen": "wrangler types",
     "check": "tsc && vite build && wrangler deploy --dry-run",
@@ -32,13 +30,17 @@
     "db:setup:remote": "pnpm db:migrate:remote && pnpm db:seed:remote"
   },
   "dependencies": {
+    "@hono/standard-validator": "^0.1.5",
+    "@scalar/hono-api-reference": "^0.9.24",
     "@tailwindcss/vite": "^4.1.17",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.44.7",
-    "hono": "4.8.2",
+    "hono": "4.10.5",
+    "hono-openapi": "^1.1.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
-    "tailwindcss": "^4.1.17"
+    "tailwindcss": "^4.1.17",
+    "zod": "^4.1.12"
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "1.14.0",

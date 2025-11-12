@@ -1,12 +1,57 @@
+import { useState, useEffect } from "react";
+
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
+  const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">("checking");
+
+  // Check API health on mount
+  useEffect(() => {
+    fetch("/api/health")
+      .then((res) => res.json())
+      .then(() => setApiStatus("online"))
+      .catch(() => setApiStatus("offline"));
+  }, []);
+
+  const handleSearch = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(`/api/search?q=${encodeURIComponent(searchQuery)}`);
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error("Search failed:", error);
+      setSearchResults({ error: "Failed to search" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
       <header className="container mx-auto px-6 py-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-indigo-900">
-            Cambodia Gazetteer
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-2xl font-bold text-indigo-900">
+              Cambodia Gazetteer
+            </h1>
+            <span
+              className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                apiStatus === "online"
+                  ? "bg-green-100 text-green-700"
+                  : apiStatus === "offline"
+                  ? "bg-red-100 text-red-700"
+                  : "bg-gray-100 text-gray-700"
+              }`}
+            >
+              {apiStatus === "online" ? "🟢 API Online" : apiStatus === "offline" ? "🔴 API Offline" : "⏳ Checking..."}
+            </span>
+          </div>
           <a
             href="https://github.com/manethpak/cambo-geo-index"
             target="_blank"
@@ -33,6 +78,66 @@ function App() {
               providing easy access to information about provinces, districts,
               communes, and villages.
             </p>
+          </div>
+
+          {/* Search Demo */}
+          <div className="mb-12">
+            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for a location (e.g., Phnom Penh, Siem Reap)..."
+                  className="flex-1 px-4 py-3 text-lg border-2 border-indigo-300 rounded-lg focus:border-indigo-500 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={loading || !searchQuery.trim()}
+                  className="px-6 py-3 text-lg font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                >
+                  {loading ? "..." : "Search"}
+                </button>
+              </div>
+            </form>
+
+            {/* Search Results */}
+            {searchResults && (
+              <div className="mt-6 max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6">
+                {searchResults.error ? (
+                  <p className="text-red-600">{searchResults.error}</p>
+                ) : (
+                  <>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Found {searchResults.count} result(s) for "{searchResults.query}"
+                    </p>
+                    <div className="space-y-3">
+                      {searchResults.results?.slice(0, 5).map((result: any) => (
+                        <div
+                          key={result.code}
+                          className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                        >
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h4 className="font-semibold text-gray-900">
+                                {result.name_en}
+                                {result.name_km && (
+                                  <span className="ml-2 text-gray-600">({result.name_km})</span>
+                                )}
+                              </h4>
+                              <p className="text-sm text-gray-500 mt-1">{result.path}</p>
+                            </div>
+                            <span className="px-2 py-1 text-xs bg-indigo-100 text-indigo-700 rounded">
+                              {result.type}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           {/* CTA Buttons */}

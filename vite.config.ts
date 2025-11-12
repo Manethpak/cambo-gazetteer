@@ -11,13 +11,4 @@ export default defineConfig({
       configPath: "./wrangler.json",
     }),
   ],
-
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://localhost:8787",
-        changeOrigin: true,
-      },
-    },
-  },
 });
