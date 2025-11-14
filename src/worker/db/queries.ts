@@ -1,8 +1,3 @@
-/**
- * Database query helper functions for Cambodia Gazetteer
- * Provides reusable functions for hierarchical queries
- */
-
 import { sql } from "drizzle-orm";
 
 /**
@@ -29,8 +24,7 @@ export async function getAncestors(db: any, code: string) {
     WHERE level > 0
     ORDER BY level DESC
   `);
-
-  return result.results || [];
+  return result || [];
 }
 
 /**
@@ -61,7 +55,7 @@ export async function getDescendants(db: any, code: string, maxDepth = 2) {
     ORDER BY level, code
   `);
 
-  return result.results || [];
+  return result || [];
 }
 
 /**
@@ -77,7 +71,7 @@ export async function getSiblings(db: any, code: string, limit = 10) {
     LIMIT ${limit}
   `);
 
-  return result.results || [];
+  return result || [];
 }
 
 /**
@@ -91,7 +85,7 @@ export async function getChildrenCount(db: any, code: string) {
     GROUP BY type
   `);
 
-  return result.results || [];
+  return result || [];
 }
 
 /**
@@ -109,7 +103,7 @@ export async function getFullHierarchy(db: any, code: string) {
     ]);
 
   return {
-    current: current.results?.[0],
+    current: current?.[0],
     ancestors,
     descendants,
     siblings,
@@ -144,9 +138,17 @@ export function buildBreadcrumb(ancestors: any[], current: any) {
  * Fuzzy search using FTS5 (if FTS5 table exists)
  * Falls back to LIKE search if FTS5 is not available
  */
-export async function fuzzySearch(db: any, query: string, limit = 20) {
+export async function fuzzySearch(
+  db: any,
+  query: string,
+  limit = 20,
+  offset = 0
+) {
   // First, try FTS5 search
   try {
+    // Sanitize query for FTS5 by escaping single quotes
+    const sanitizedQuery = query.replace(/'/g, "''");
+
     const ftsResult = await db.all(sql`
       SELECT 
         au.code, 
@@ -157,13 +159,14 @@ export async function fuzzySearch(db: any, query: string, limit = 20) {
         fts.rank
       FROM administrative_units_fts fts
       JOIN administrative_units au ON au.rowid = fts.rowid
-      WHERE administrative_units_fts MATCH ${query}
+      WHERE administrative_units_fts MATCH ${sql.raw(`'${sanitizedQuery}'`)}
       ORDER BY rank
       LIMIT ${limit}
+      OFFSET ${offset}
     `);
 
-    return ftsResult.results || [];
-  } catch (error) {
+    return ftsResult || [];
+  } catch {
     // Fallback to LIKE search if FTS5 table doesn't exist
     const likeResult = await db.all(sql`
       SELECT code, name_km, name_en, type, parent_code
@@ -181,9 +184,38 @@ export async function fuzzySearch(db: any, query: string, limit = 20) {
         END,
         name_en
       LIMIT ${limit}
+      OFFSET ${offset}
     `);
 
-    return likeResult.results || [];
+    return likeResult || [];
+  }
+}
+
+/**
+ * Get total count for fuzzy search
+ */
+export async function fuzzySearchCount(db: any, query: string) {
+  try {
+    // Sanitize query for FTS5 by escaping single quotes
+    const sanitizedQuery = query.replace(/'/g, "''");
+
+    const ftsResult = await db.all(sql`
+      SELECT COUNT(*) as count
+      FROM administrative_units_fts fts
+      WHERE administrative_units_fts MATCH ${sql.raw(`'${sanitizedQuery}'`)}
+    `);
+
+    return ftsResult?.[0]?.count || 0;
+  } catch {
+    const likeResult = await db.all(sql`
+      SELECT COUNT(*) as count
+      FROM administrative_units
+      WHERE name_en LIKE ${"%" + query + "%"} 
+         OR name_km LIKE ${"%" + query + "%"}
+         OR code LIKE ${query + "%"}
+    `);
+
+    return likeResult?.[0]?.count || 0;
   }
 }
 
@@ -193,6 +225,9 @@ export async function fuzzySearch(db: any, query: string, limit = 20) {
  */
 export async function autocompleteSearch(db: any, query: string, limit = 10) {
   try {
+    // Sanitize query for FTS5 by escaping single quotes
+    const sanitizedQuery = query.replace(/'/g, "''");
+
     // Try FTS5 prefix search
     const ftsResult = await db.all(sql`
       SELECT 
@@ -203,13 +238,13 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
         au.parent_code
       FROM administrative_units_fts fts
       JOIN administrative_units au ON au.rowid = fts.rowid
-      WHERE administrative_units_fts MATCH ${query + "*"}
+      WHERE administrative_units_fts MATCH ${sql.raw(`'${sanitizedQuery}*'`)}
       ORDER BY rank
       LIMIT ${limit}
     `);
 
-    return ftsResult.results || [];
-  } catch (error) {
+    return ftsResult || [];
+  } catch {
     // Fallback to LIKE prefix search
     const likeResult = await db.all(sql`
       SELECT code, name_km, name_en, type, parent_code
@@ -227,7 +262,7 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
       LIMIT ${limit}
     `);
 
-    return likeResult.results || [];
+    return likeResult || [];
   }
 }
 
@@ -235,8 +270,13 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
  * Search with full hierarchy context
  * Returns search results enriched with breadcrumb trails
  */
-export async function searchWithHierarchy(db: any, query: string, limit = 20) {
-  const searchResults = await fuzzySearch(db, query, limit);
+export async function searchWithHierarchy(
+  db: any,
+  query: string,
+  limit = 20,
+  offset = 0
+) {
+  const searchResults = await fuzzySearch(db, query, limit, offset);
 
   const enriched = await Promise.all(
     searchResults.map(async (result: any) => {

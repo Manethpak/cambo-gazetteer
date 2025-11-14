@@ -1,24 +1,35 @@
-/**
- * Search handler - Business logic for search and autocomplete endpoints
- */
+import { calculateOffset, createPaginatedResponse } from "~/utils/pagination";
+import {
+  AutocompleteResponse,
+  Database,
+  PaginatedSearchResponse,
+} from "~/types";
+import {
+  fuzzySearchCount,
+  searchWithHierarchy,
+  autocompleteSearch,
+} from "~/db/queries";
 
-import type { Database, SearchResponse, AutocompleteResponse } from "../../types";
-import { autocompleteSearch, searchWithHierarchy } from "../../db/queries";
-
 /**
- * Search with hierarchy context
+ * Search with hierarchy context and pagination
  */
 export async function search(
   db: Database,
   query: string,
-  limit = 20
-): Promise<SearchResponse> {
-  const results = await searchWithHierarchy(db, query, limit);
+  page: number,
+  limit: number
+): Promise<PaginatedSearchResponse> {
+  const offset = calculateOffset(page, limit);
+
+  // Get total count for pagination
+  const total = await fuzzySearchCount(db, query);
+
+  // Get paginated results
+  const data = await searchWithHierarchy(db, query, limit, offset);
 
   return {
     query,
-    count: results.length,
-    results,
+    ...createPaginatedResponse(data, page, limit, total),
   };
 }
 

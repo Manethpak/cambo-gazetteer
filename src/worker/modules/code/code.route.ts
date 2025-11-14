@@ -1,8 +1,9 @@
 import { Hono } from "hono";
-import { drizzle } from "drizzle-orm/d1";
+import { describeRoute } from "hono-openapi";
 import { getLocationByCode } from "./code.handler";
 import { sValidator } from "@hono/standard-validator";
-import { ParamSchema } from "./code.schema";
+import { codeParamSchema, getLocationByCodeDoc } from "./code.schema";
+import { dbClient } from "~/db";
 
 const codeRouter = new Hono<{ Bindings: Env }>();
 
@@ -11,10 +12,11 @@ const codeRouter = new Hono<{ Bindings: Env }>();
  */
 codeRouter.get(
   "/v1/code/:code",
-  sValidator("param", ParamSchema),
+  describeRoute(getLocationByCodeDoc),
+  sValidator("param", codeParamSchema),
   async (c) => {
     const code = c.req.param("code");
-    const db = drizzle(c.env.cambo_gazetteer);
+    const db = dbClient(c.env);
 
     const location = await getLocationByCode(db, code);
 

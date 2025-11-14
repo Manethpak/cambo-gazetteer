@@ -5,7 +5,12 @@
     "types": [
       "vite/client",
       "./worker-configuration.d.ts"
-    ]
+    ],
+    "paths": {
+      "~/*": [
+        "./src/worker/*"
+      ]
+    }
   },
   "include": [
     "src/worker"

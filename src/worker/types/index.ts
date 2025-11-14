@@ -2,12 +2,12 @@
  * Shared TypeScript types for the Cambodia Geo Gazetteer API
  */
 
-import type { DrizzleD1Database } from "drizzle-orm/d1";
+import { dbClient } from "../db";
 
 /**
  * Database instance type
  */
-export type Database = DrizzleD1Database<Record<string, never>>;
+export type Database = ReturnType<typeof dbClient>;
 
 /**
  * Administrative unit types
@@ -69,6 +69,23 @@ export interface LocationDetail extends AdministrativeUnit {
 }
 
 /**
+ * Pagination types
+ */
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: PaginationMeta;
+}
+
+/**
  * API response wrappers
  */
 export interface ApiResponse<T> {
@@ -77,15 +94,10 @@ export interface ApiResponse<T> {
   message?: string;
 }
 
-export interface ListResponse<T> {
-  count: number;
-  results: T[];
-}
-
-export interface SearchResponse {
+export interface PaginatedSearchResponse {
   query: string;
-  count: number;
-  results: SearchResult[];
+  data: SearchResult[];
+  pagination: PaginationMeta;
 }
 
 export interface AutocompleteResponse {
@@ -98,6 +110,21 @@ export interface AutocompleteResponse {
  */
 export interface HealthResponse {
   status: "ok" | "error";
+  timestamp: string;
+}
+
+/**
+ * Statistics response
+ */
+export interface StatsResponse {
+  total: number;
+  byType: {
+    provinces: number;
+    municipalities: number;
+    districts: number;
+    communes: number;
+    villages: number;
+  };
   timestamp: string;
 }
 

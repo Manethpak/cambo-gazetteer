@@ -1,55 +1,117 @@
-/**
- * Administrative routes - Provinces, districts, communes, villages endpoints
- */
-
 import { Hono } from "hono";
-import { drizzle } from "drizzle-orm/d1";
+import { describeRoute } from "hono-openapi";
 import {
   getProvinces,
   getDistricts,
   getCommunes,
   getVillages,
 } from "./administrative.handler";
+import { parsePaginationParams } from "~/utils/pagination";
+import { dbClient } from "~/db";
+import {
+  getProvincesDoc,
+  getDistrictsDoc,
+  getCommunesDoc,
+  getVillagesDoc,
+  districtsQuerySchema,
+  communesQuerySchema,
+  villagesQuerySchema,
+} from "./administrative.schema";
+import { sValidator } from "@hono/standard-validator";
+import { cache } from "hono/cache";
 
 const administrativeRouter = new Hono<{ Bindings: Env }>();
 
 /**
  * GET /provinces - Get all provinces and municipalities
  */
-administrativeRouter.get("/provinces", async (c) => {
-  const db = drizzle(c.env.cambo_gazetteer);
-  const result = await getProvinces(db);
-  return c.json(result);
-});
+administrativeRouter.get(
+  "/v1/provinces",
+  cache({
+    cacheName: "provinces-cache",
+    cacheControl: "max-age=3600",
+  }),
+  describeRoute(getProvincesDoc),
+  async (c) => {
+    const db = dbClient(c.env);
+    const result = await getProvinces(db);
+    return c.json(result);
+  }
+);
 
 /**
  * GET /districts - Get districts by province or all districts
+ * Supports pagination via ?page=N&limit=N (defaults: page=1, limit=20)
  */
-administrativeRouter.get("/districts", async (c) => {
-  const provinceCode = c.req.query("province");
-  const db = drizzle(c.env.cambo_gazetteer);
-  const result = await getDistricts(db, provinceCode);
-  return c.json(result);
-});
+administrativeRouter.get(
+  "/v1/districts",
+  cache({
+    cacheName: "districts-cache",
+    cacheControl: "max-age=3600",
+  }),
+  describeRoute(getDistrictsDoc),
+  sValidator("query", districtsQuerySchema),
+  async (c) => {
+    const provinceCode = c.req.query("province");
+    const { page, limit } = parsePaginationParams(
+      c.req.query("page"),
+      c.req.query("limit")
+    );
+    const db = dbClient(c.env);
+
+    const result = await getDistricts(db, page, limit, provinceCode);
+    return c.json(result);
+  }
+);
 
 /**
- * GET /communes - Get communes by district or sample communes
+ * GET /communes - Get communes by district or all communes
+ * Supports pagination via ?page=N&limit=N (defaults: page=1, limit=20)
  */
-administrativeRouter.get("/communes", async (c) => {
-  const districtCode = c.req.query("district");
-  const db = drizzle(c.env.cambo_gazetteer);
-  const result = await getCommunes(db, districtCode);
-  return c.json(result);
-});
+administrativeRouter.get(
+  "/v1/communes",
+  cache({
+    cacheName: "communes-cache",
+    cacheControl: "max-age=3600",
+  }),
+  describeRoute(getCommunesDoc),
+  sValidator("query", communesQuerySchema),
+  async (c) => {
+    const districtCode = c.req.query("district");
+    const { page, limit } = parsePaginationParams(
+      c.req.query("page"),
+      c.req.query("limit")
+    );
+    const db = dbClient(c.env);
+
+    const result = await getCommunes(db, page, limit, districtCode);
+    return c.json(result);
+  }
+);
 
 /**
- * GET /villages - Get villages by commune or sample villages
+ * GET /villages - Get villages by commune or all villages
+ * Supports pagination via ?page=N&limit=N (defaults: page=1, limit=20)
  */
-administrativeRouter.get("/villages", async (c) => {
-  const communeCode = c.req.query("commune");
-  const db = drizzle(c.env.cambo_gazetteer);
-  const result = await getVillages(db, communeCode);
-  return c.json(result);
-});
+administrativeRouter.get(
+  "/v1/villages",
+  cache({
+    cacheName: "villages-cache",
+    cacheControl: "max-age=3600",
+  }),
+  describeRoute(getVillagesDoc),
+  sValidator("query", villagesQuerySchema),
+  async (c) => {
+    const communeCode = c.req.query("commune");
+    const { page, limit } = parsePaginationParams(
+      c.req.query("page"),
+      c.req.query("limit")
+    );
+    const db = dbClient(c.env);
+
+    const result = await getVillages(db, page, limit, communeCode);
+    return c.json(result);
+  }
+);
 
 export default administrativeRouter;

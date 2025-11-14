@@ -1,12 +1,5 @@
-/**
- * Code handler - Business logic for location code lookup endpoints
- */
-
-import type { Database, LocationDetail } from "../../types";
-import {
-  getFullHierarchy,
-  buildBreadcrumb,
-} from "../../db/queries";
+import type { Database, LocationDetail } from "~/types";
+import { getFullHierarchy, buildBreadcrumb } from "~/db/queries";
 
 /**
  * Get location details by code with full hierarchy context

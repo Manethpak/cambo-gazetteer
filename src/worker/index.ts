@@ -3,15 +3,17 @@ import healthRouter from "./modules/health/health.route";
 import codeRouter from "./modules/code/code.route";
 import searchRouter from "./modules/search/search.route";
 import administrativeRouter from "./modules/administrative/administrative.route";
+import statsRouter from "./modules/stats/stats.route";
 import { openAPIRouteHandler } from "hono-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 
 const app = new Hono<{ Bindings: Env }>();
 
 app.route("/api", healthRouter);
+app.route("/api", statsRouter);
+app.route("/api", administrativeRouter);
 app.route("/api", codeRouter);
 app.route("/api", searchRouter);
-app.route("/api", administrativeRouter);
 
 app.get(
   "/openapi.json",
@@ -29,7 +31,7 @@ app.get(
 app.get(
   "/api/docs",
   Scalar({
-    theme: "saturn",
+    theme: "deepSpace",
     url: "/openapi.json",
   })
 );
