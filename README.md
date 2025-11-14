@@ -1,75 +1,99 @@
-# Cambodia Gazetteer - Geographical Index Open API
+# Cambodia Gazetteer
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A comprehensive Open API for Cambodia's geographical data, providing easy access to information about provinces, districts, communes, and villages.
+A comprehensive Open API for Cambodia's geographical data, providing access to provinces, districts, communes, and villages with full-text search capabilities.
 
-## 📋 Description
+## Inspiration
 
-This project provides a RESTful API for accessing Cambodia's geographical gazetteer data. Built with modern web technologies, it offers a fast and reliable way to query administrative divisions and geographical information across Cambodia.
+This project was created to address the lack of publicly accessible geographical data and APIs for Cambodia. With the hope that this will be a valuable resource for both local and international developers and researchers working on projects related to Cambodia's administrative divisions, location services, data analysis, and more.
 
-## 🚀 Features
+## Features
 
-- RESTful API for Cambodia's geographical data
-- Fast and lightweight using Hono framework
-- Built with Bun for optimal performance
-- TypeScript for type safety
-- Open source and free to use
+- **RESTful API** - Query administrative divisions and geographical data
+- **Full-Text Search** - FTS5-powered search with fuzzy matching
+- **Autocomplete** - Typeahead suggestions for location queries
+- **Hierarchical Data** - Navigate through administrative levels
+- **Bilingual Support** - Khmer and English names
+- **Interactive Docs** - OpenAPI/Scalar documentation
+- **Edge Deployment** - Runs on Cloudflare Workers with D1 database
 
-## 📦 Installation
+## Tech Stack
+
+- **Runtime**: Cloudflare Workers
+- **Framework**: Hono.js
+- **Database**: Cloudflare D1 (SQLite)
+- **ORM**: Drizzle ORM
+- **Language**: TypeScript
+- **Frontend**: React + Vite
+
+## API Endpoints
+
+- `GET /api/administrative/:code` - Get administrative unit by code
+- `GET /api/administrative/provinces` - List all provinces
+- `GET /api/administrative/:provinceCode/districts` - List districts in province
+- `GET /api/code/:code` - Query by administrative code
+- `GET /api/search?q={query}` - Full-text search with pagination
+- `GET /api/autocomplete?q={query}` - Autocomplete suggestions
+- `GET /api/stats` - Database statistics
+- `GET /api/docs` - Interactive API documentation
+
+## Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/manethpak/cambo-geo-index.git
-cd cambo-geo-index
-
 # Install dependencies
 pnpm install
+
+# Setup local database
+pnpm db:setup:local
+
+# Run development server
+pnpm dev
+
+# Deploy to Cloudflare
+pnpm deploy
 ```
 
-## 🛠️ Usage
-
-### Development
+## Database Management
 
 ```bash
-# Run in development mode with hot reload
-pnpm run dev
+# Generate migrations
+pnpm db:generate
+
+# Apply migrations (local)
+pnpm db:migrate:local
+
+# Apply migrations (remote)
+pnpm db:migrate:remote
+
+# Seed database
+pnpm db:seed:local
 ```
 
-### Production
+## Data
 
-```bash
-# Build the project
-pnpm run build
+The gazetteer contains **16,457** administrative units:
+- 25 Provinces/Municipalities
+- 210 Districts
+- 1,652 Communes
+- 14,570 Villages
 
-# Start the server
-pnpm run start
-```
+Data sourced from:
+- [Open Development Cambodia](https://data.opendevelopmentcambodia.net/dataset/cambodia-gazetteer)
+- [NCDD Gazetteer Database](https://db.ncdd.gov.kh/gazetteer)
 
-### Linting and Formatting
+See [data/README.md](data/README.md) for detailed data documentation.
 
-```bash
-# Lint code
-pnpm run lint
+## License
 
-# Format code
-pnpm run format
-```
+MIT License - see [LICENSE](LICENSE) file for details.
 
-## 📊 Data Sources
+Data: Open Data Commons Open Database License (ODbL)
 
-Read more about the data sources used in this project in the [Data Sources](source/README.md) document.
+## Contributing
 
-## 📝 License
+Contributions welcome! Open an issue or submit a PR.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Author
 
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-Feel free to check the [issues page](https://github.com/manethpak/cambo-geo-index/issues).
-
-## ⭐ Show your support
-
-Give a ⭐️ if this project helped you!
+**Maneth PAK** - [manethpak.dev@gmail.com](mailto:manethpak.dev@gmail.com)

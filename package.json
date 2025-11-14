@@ -1,5 +1,5 @@
 {
-  "name": "cambo-geo-index",
+  "name": "cambo-gazetteer",
   "version": "1.0.0",
   "description": "Cambodia Gazetteer - Geographical Index Open API",
   "private": true,
