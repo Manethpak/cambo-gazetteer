@@ -18,7 +18,6 @@ import {
   villagesQuerySchema,
 } from "./administrative.schema";
 import { sValidator } from "@hono/standard-validator";
-import { cache } from "hono/cache";
 import { addCache } from "~/utils/cache";
 
 const administrativeRouter = new Hono<{ Bindings: Env }>();
