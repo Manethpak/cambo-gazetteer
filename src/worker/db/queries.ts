@@ -8,18 +8,18 @@ export async function getAncestors(db: any, code: string) {
   const result = await db.all(sql`
     WITH RECURSIVE ancestor_tree AS (
       -- Start with the current node
-      SELECT code, name_km, name_en, type, parent_code, 0 as level
+      SELECT code, name_km, name_en, type, type_km, type_en, parent_code, 0 as level
       FROM administrative_units
       WHERE code = ${code}
       
       UNION ALL
       
       -- Recursively get parents
-      SELECT au.code, au.name_km, au.name_en, au.type, au.parent_code, at.level + 1
+      SELECT au.code, au.name_km, au.name_en, au.type, au.type_km, au.type_en, au.parent_code, at.level + 1
       FROM administrative_units au
       INNER JOIN ancestor_tree at ON au.code = at.parent_code
     )
-    SELECT code, name_km, name_en, type, parent_code, level
+    SELECT code, name_km, name_en, type, type_km, type_en, parent_code, level
     FROM ancestor_tree
     WHERE level > 0
     ORDER BY level DESC
@@ -28,31 +28,15 @@ export async function getAncestors(db: any, code: string) {
 }
 
 /**
- * Get all descendants (children) for a given administrative unit
- * Returns array in hierarchical order
- *
- * @param maxDepth - Maximum depth to traverse (default: 2)
+ * Get immediate descendants (direct children only) for a given administrative unit
+ * Returns array with only 1 level of children
  */
-export async function getDescendants(db: any, code: string, maxDepth = 2) {
+export async function getDescendants(db: any, code: string) {
   const result = await db.all(sql`
-    WITH RECURSIVE descendant_tree AS (
-      -- Start with the current node
-      SELECT code, name_km, name_en, type, parent_code, 0 as level
-      FROM administrative_units
-      WHERE code = ${code}
-      
-      UNION ALL
-      
-      -- Recursively get children
-      SELECT au.code, au.name_km, au.name_en, au.type, au.parent_code, dt.level + 1
-      FROM administrative_units au
-      INNER JOIN descendant_tree dt ON au.parent_code = dt.code
-      WHERE dt.level < ${maxDepth}
-    )
-    SELECT code, name_km, name_en, type, parent_code, level
-    FROM descendant_tree
-    WHERE level > 0
-    ORDER BY level, code
+    SELECT au.code, au.name_km, au.name_en, au.type, au.type_km, au.type_en, au.parent_code
+    FROM administrative_units au
+    WHERE au.parent_code = ${code}
+    ORDER BY au.name_en
   `);
 
   return result || [];
@@ -63,7 +47,7 @@ export async function getDescendants(db: any, code: string, maxDepth = 2) {
  */
 export async function getSiblings(db: any, code: string, limit = 10) {
   const result = await db.all(sql`
-    SELECT s.code, s.name_km, s.name_en, s.type
+    SELECT s.code, s.name_km, s.name_en, s.type, s.type_km, s.type_en
     FROM administrative_units current
     JOIN administrative_units s ON s.parent_code = current.parent_code
     WHERE current.code = ${code} AND s.code != ${code}
@@ -124,12 +108,16 @@ export function buildBreadcrumb(ancestors: any[], current: any) {
       nameKm: a.name_km || a.nameKm,
       nameEn: a.name_en || a.nameEn,
       type: a.type,
+      typeKm: a.type_km || a.typeKm,
+      typeEn: a.type_en || a.typeEn,
     })),
     {
       code: current.code,
       nameKm: current.name_km || current.nameKm,
       nameEn: current.name_en || current.nameEn,
       type: current.type,
+      typeKm: current.type_km || current.typeKm,
+      typeEn: current.type_en || current.typeEn,
     },
   ];
 }
@@ -155,12 +143,13 @@ export async function fuzzySearch(
         au.name_km, 
         au.name_en, 
         au.type,
-        au.parent_code,
-        fts.rank
+        au.type_km,
+        au.type_en,
+        au.parent_code
       FROM administrative_units_fts fts
       JOIN administrative_units au ON au.rowid = fts.rowid
       WHERE administrative_units_fts MATCH ${sql.raw(`'${sanitizedQuery}'`)}
-      ORDER BY rank
+      ORDER BY fts.rank
       LIMIT ${limit}
       OFFSET ${offset}
     `);
@@ -169,7 +158,7 @@ export async function fuzzySearch(
   } catch {
     // Fallback to LIKE search if FTS5 table doesn't exist
     const likeResult = await db.all(sql`
-      SELECT code, name_km, name_en, type, parent_code
+      SELECT code, name_km, name_en, type, parent_code, type_km, type_en
       FROM administrative_units
       WHERE name_en LIKE ${"%" + query + "%"} 
          OR name_km LIKE ${"%" + query + "%"}
@@ -235,7 +224,9 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
         au.name_km, 
         au.name_en, 
         au.type,
-        au.parent_code
+        au.parent_code,
+        au.type_km,
+        au.type_en
       FROM administrative_units_fts fts
       JOIN administrative_units au ON au.rowid = fts.rowid
       WHERE administrative_units_fts MATCH ${sql.raw(`'${sanitizedQuery}*'`)}
@@ -247,7 +238,7 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
   } catch {
     // Fallback to LIKE prefix search
     const likeResult = await db.all(sql`
-      SELECT code, name_km, name_en, type, parent_code
+      SELECT code, name_km, name_en, type, type_km, type_en, parent_code
       FROM administrative_units
       WHERE name_en LIKE ${query + "%"} 
          OR name_km LIKE ${query + "%"}
@@ -286,7 +277,8 @@ export async function searchWithHierarchy(
       return {
         ...result,
         breadcrumb,
-        path: breadcrumb.map((b) => b.nameEn).join(" > "),
+        path: breadcrumb.map((b) => b.nameEn).join(", "),
+        pathKm: breadcrumb.map((b) => b.nameKm).join(", "),
       };
     })
   );

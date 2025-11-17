@@ -19,7 +19,8 @@ export async function getLocationByCode(
   return {
     ...hierarchy.current,
     breadcrumb,
-    path: breadcrumb.map((b) => b.nameEn).join(" > "),
+    path: breadcrumb.map((b) => b.nameEn).join(", "),
+    pathKm: breadcrumb.map((b) => b.nameKm).join(", "),
     ancestors: hierarchy.ancestors,
     children: hierarchy.descendants,
     siblings: hierarchy.siblings,
