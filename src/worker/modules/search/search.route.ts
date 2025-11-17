@@ -10,6 +10,7 @@ import {
   autocompleteQuerySchema,
 } from "./search.schema";
 import { sValidator } from "@hono/standard-validator";
+import { addSearchCache } from "~/utils/cache";
 
 const searchRouter = new Hono<{ Bindings: Env }>();
 
@@ -19,6 +20,7 @@ const searchRouter = new Hono<{ Bindings: Env }>();
  */
 searchRouter.get(
   "/search",
+  addSearchCache("search"),
   sValidator("query", searchQuerySchema),
   describeRoute(searchDoc),
   async (c) => {
@@ -43,6 +45,7 @@ searchRouter.get(
  */
 searchRouter.get(
   "/autocomplete",
+  addSearchCache("autocomplete"),
   sValidator("query", autocompleteQuerySchema),
   describeRoute(autocompleteDoc),
   async (c) => {

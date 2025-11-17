@@ -19,6 +19,7 @@ import {
 } from "./administrative.schema";
 import { sValidator } from "@hono/standard-validator";
 import { cache } from "hono/cache";
+import { addCache } from "~/utils/cache";
 
 const administrativeRouter = new Hono<{ Bindings: Env }>();
 
@@ -27,10 +28,7 @@ const administrativeRouter = new Hono<{ Bindings: Env }>();
  */
 administrativeRouter.get(
   "/v1/provinces",
-  cache({
-    cacheName: "provinces-cache",
-    cacheControl: "max-age=3600",
-  }),
+  addCache("provinces", "4hr"),
   describeRoute(getProvincesDoc),
   async (c) => {
     const db = dbClient(c.env);
@@ -45,10 +43,7 @@ administrativeRouter.get(
  */
 administrativeRouter.get(
   "/v1/districts",
-  cache({
-    cacheName: "districts-cache",
-    cacheControl: "max-age=3600",
-  }),
+  addCache("districts", "4hr"),
   describeRoute(getDistrictsDoc),
   sValidator("query", districtsQuerySchema),
   async (c) => {
@@ -70,10 +65,7 @@ administrativeRouter.get(
  */
 administrativeRouter.get(
   "/v1/communes",
-  cache({
-    cacheName: "communes-cache",
-    cacheControl: "max-age=3600",
-  }),
+  addCache("communes", "4hr"),
   describeRoute(getCommunesDoc),
   sValidator("query", communesQuerySchema),
   async (c) => {
@@ -95,10 +87,7 @@ administrativeRouter.get(
  */
 administrativeRouter.get(
   "/v1/villages",
-  cache({
-    cacheName: "villages-cache",
-    cacheControl: "max-age=3600",
-  }),
+  addCache("villages", "4hr"),
   describeRoute(getVillagesDoc),
   sValidator("query", villagesQuerySchema),
   async (c) => {

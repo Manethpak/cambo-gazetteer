@@ -4,6 +4,7 @@ import { getLocationByCode } from "./code.handler";
 import { sValidator } from "@hono/standard-validator";
 import { codeParamSchema, getLocationByCodeDoc } from "./code.schema";
 import { dbClient } from "~/db";
+import { addCache } from "~/utils/cache";
 
 const codeRouter = new Hono<{ Bindings: Env }>();
 
@@ -12,6 +13,7 @@ const codeRouter = new Hono<{ Bindings: Env }>();
  */
 codeRouter.get(
   "/v1/code/:code",
+  addCache("code", "4hr"),
   describeRoute(getLocationByCodeDoc),
   sValidator("param", codeParamSchema),
   async (c) => {
