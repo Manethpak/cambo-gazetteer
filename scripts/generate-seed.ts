@@ -62,6 +62,12 @@ const generateInsertStatements = () => {
     const nameKm = unit.name_km.replace(/'/g, "''");
     const nameEn = unit.name_en.replace(/'/g, "''");
     const type = unit.type.replace(/'/g, "''");
+    const typeKm = unit.type_km
+      ? `'${unit.type_km.replace(/'/g, "''")}'`
+      : "NULL";
+    const typeEn = unit.type_en
+      ? `'${unit.type_en.replace(/'/g, "''")}'`
+      : "NULL";
     const parentCode = unit.parent_code
       ? `'${unit.parent_code.replace(/'/g, "''")}'`
       : "NULL";
@@ -75,7 +81,7 @@ const generateInsertStatements = () => {
       ? `'${unit.checker_note.replace(/'/g, "''")}'`
       : "NULL";
 
-    const statement = `INSERT OR REPLACE INTO administrative_units (code, name_km, name_en, type, parent_code, reference, official_note, checker_note) VALUES ('${code}', '${nameKm}', '${nameEn}', '${type}', ${parentCode}, ${reference}, ${officialNote}, ${checkerNote});`;
+    const statement = `INSERT OR REPLACE INTO administrative_units (code, name_km, name_en, type, type_km, type_en, parent_code, reference, official_note, checker_note) VALUES ('${code}', '${nameKm}', '${nameEn}', '${type}', ${typeKm}, ${typeEn}, ${parentCode}, ${reference}, ${officialNote}, ${checkerNote});`;
 
     statements.push(statement);
   }

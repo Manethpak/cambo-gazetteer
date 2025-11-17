@@ -20,6 +20,9 @@ export const administrativeUnits = sqliteTable(
       enum: ["province", "municipality", "district", "commune", "village"],
     }).notNull(),
 
+    typeEn: text("type_en"), // Original Khmer type (ស្រុក, ឃុំ, ភូមិ, ខណ្ឌ, សង្កាត់, ក្រុង)
+    typeKm: text("type_km"), // Direct English type translation (Srok, Khum, Phum, Khan, Sangkat, Krong)
+
     // Self-referencing foreign key for hierarchy
     parentCode: text("parent_code").references(
       (): any => administrativeUnits.code

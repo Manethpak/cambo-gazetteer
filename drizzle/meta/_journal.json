@@ -15,6 +15,13 @@
       "when": 1762854504160,
       "tag": "0001_fts5_setup",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1763350719059,
+      "tag": "0002_salty_leo",
+      "breakpoints": true
     }
   ]
 }

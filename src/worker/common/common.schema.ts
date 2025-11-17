@@ -8,11 +8,23 @@ export const administrativeUnitTypeSchema = z.enum([
   "village",
 ]);
 
+export const typeKm = z.enum(["ខេត្ត", "ក្រុង", "ស្រុក", "ឃុំ", "ភូមិ"]);
+
+export const typeEn = z.enum([
+  "province",
+  "municipality",
+  "district",
+  "commune",
+  "village",
+]);
+
 export const administrativeUnitSchema = z.object({
   code: z.string(),
   nameKm: z.string(),
   nameEn: z.string(),
   type: administrativeUnitTypeSchema,
+  typeEn: z.string().nullable(),
+  typeKm: z.string().nullable(),
   parentCode: z.string().nullable(),
   reference: z.string().nullable().optional(),
   officialNote: z.string().nullable().optional(),

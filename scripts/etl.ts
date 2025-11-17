@@ -33,6 +33,8 @@ interface AdministrativeUnit {
   name_km: string;
   name_en: string;
   type: "province" | "municipality" | "district" | "commune" | "village";
+  type_km?: string; // Original Khmer type name (ស្រុក, ឃុំ, ភូមិ, etc.)
+  type_en?: string; // Original English type name (Srok, Khum, Phum, etc.)
   parent_code?: string;
   reference?: string;
   official_note?: string;
@@ -233,10 +235,21 @@ const provinceMapping: Record<
 // Type mapping from Khmer to English
 const typeMapping: Record<string, "district" | "commune" | "village"> = {
   ស្រុក: "district",
+  ក្រុង: "district", // Municipality (city)
+  ខណ្ឌ: "district", // Khan (urban district)
+  សង្កាត់: "commune", // Sangkat (urban commune)
   ឃុំ: "commune",
   ភូមិ: "village",
-  ក្រុង: "district", // Khan (urban district)
-  សង្កាត់: "commune", // Sangkat (urban commune)
+};
+
+// Mapping from Khmer type to English type name
+const typeNameMapping: Record<string, string> = {
+  ស្រុក: "Srok", // District
+  ក្រុង: "Krong", // Municipality (city)
+  ខណ្ឌ: "Khan", // Urban District
+  សង្កាត់: "Sangkat", // Urban Commune
+  ឃុំ: "Khum", // Commune
+  ភូមិ: "Phum", // Village
 };
 
 /**
@@ -281,6 +294,8 @@ function extractData(filePath: string): AdministrativeUnit[] {
         name_km: provinceInfo.name_km,
         name_en: provinceInfo.name_en,
         type: provinceInfo.type,
+        type_km: provinceInfo.type === "municipality" ? "រាជធានី" : "ខេត្ត",
+        type_en: provinceInfo.type === "municipality" ? "Municipality" : "Province",
       });
     }
   }
@@ -333,6 +348,8 @@ function extractData(filePath: string): AdministrativeUnit[] {
         name_km: String(row["Name (Khmer)"] || "").trim(),
         name_en: String(row["Name (Latin)"] || "").trim(),
         type,
+        type_km: typeKhmer || undefined,
+        type_en: typeNameMapping[typeKhmer] || undefined,
         parent_code: parentCode,
       };
 
