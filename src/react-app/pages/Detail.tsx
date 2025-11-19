@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { ResponseByCode } from "../types";
 import { Breadcrumbs } from "../components/Breadcrumbs";
 import { Loader2, MapPin, ChevronRight } from "lucide-react";
+import { getEnglishName, getKhmerName } from "@/libs/name";
 
 export function Detail() {
   const { code } = useParams<{ code: string }>();
@@ -58,7 +59,7 @@ export function Detail() {
 
   // Use breadcrumbs from API if available, otherwise fall back to path parsing
   const breadcrumbs =
-    unit.breadcrumb?.slice(0, -1).map((item) => ({
+    unit.breadcrumb?.map((item) => ({
       label: item.name_en,
       path: `/code/${item.code}`,
     })) || [];
@@ -88,44 +89,41 @@ export function Detail() {
               </span>
             </div>
           </div>
-
-          {unit.parent_code && (
-            <Link
-              to={`/code/${unit.parent_code}`}
-              className="text-sm font-medium text-indigo-600 hover:text-indigo-800 hover:underline"
-            >
-              &larr; View Parent
-            </Link>
-          )}
         </div>
       </div>
 
       {unit.children.length > 0 && (
         <div>
           <h3 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
-            Administrative Divisions
+            {unit.children[0]?.type_en}s / <span className="font-khmer">{unit.children[0]?.type_km}</span>
             <span className="text-sm font-normal text-slate-600 bg-slate-100 px-2 py-1 rounded-full">
               {unit.children.length}
             </span>
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {unit.children.map((child) => (
+            {unit.children.sort((a,b) => Number(a.code) - Number(b.code)).map((child) => (
               <Link
                 key={child.code}
                 to={`/code/${child.code}`}
                 className="group p-4 bg-white text-text border border-slate-200 rounded-xl hover:border-indigo-300 hover:shadow-md transition-all"
               >
-                <div className="flex justify-between items-start">
+                <div className="flex justify-between items-center">
                   <div>
-                    <div className="font-bold text-slate-900 group-hover:text-indigo-700 transition-colors">
-                      {child.name_en}
+                    <div className="font-bold text-slate-800 group-hover:text-indigo-700 transition-colors">
+                      {getEnglishName(child)}
                     </div>
-                    <div className="font-khmer text-slate-600 text-sm mt-1">
-                      {child.name_km}
+                    <div className="font-khmer text-slate-600 mt-1">
+                      {getKhmerName(child)}
                     </div>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+
+                  <div className="flex items-center gap-2">
+                    <p className="font-mono text-sm bg-slate-100 px-2 py-1 rounded">
+                      {child.code}
+                    </p>
+                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-indigo-500 transition-colors" />
+                  </div>
                 </div>
               </Link>
             ))}

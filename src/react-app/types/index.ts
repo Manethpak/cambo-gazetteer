@@ -10,6 +10,8 @@ export interface AdministrativeUnit {
   name_en: string;
   name_km: string;
   type: Type;
+  type_en: string;
+  type_km: string;
   path: string;
   parent_code?: string | null;
   count?: number; // For provinces showing district count, etc.

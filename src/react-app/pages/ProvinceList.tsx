@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { AdministrativeUnit } from "../types";
+import { AdministrativeUnit } from "@/types";
 import { Loader2, Map } from "lucide-react";
+import { getEnglishName, getKhmerName } from "@/libs/name";
 
 export function ProvinceList() {
   const [provinces, setProvinces] = useState<AdministrativeUnit[]>([]);
@@ -59,11 +60,11 @@ export function ProvinceList() {
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 mb-1 group-hover:text-indigo-700 transition-colors">
-                  {province.name_en}
+                <h3 className="text-lg font-bold text-slate-800 mb-1 group-hover:text-indigo-700 transition-colors">
+                  {getEnglishName(province)}
                 </h3>
-                <h4 className="text-lg font-khmer text-slate-500 mb-4">
-                  {province.name_km}
+                <h4 className="text-lg font-khmer text-slate-700 mb-4">
+{getKhmerName(province)}
                 </h4>
 
                 <div className="flex items-center text-sm text-slate-500">

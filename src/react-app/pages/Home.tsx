@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { Map, Database, Zap, Globe } from "lucide-react";
 
@@ -49,12 +49,12 @@ export function Home() {
             </div>
 
             <div className="flex flex-wrap justify-center gap-4">
-              <button
-                onClick={() => navigate("/provinces")}
-                className="px-8 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-indigo-50 transition-all hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95"
+              <Link
+                to="/provinces"
+                className="px-8 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-indigo-50 transition-all hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 hover:pointer"
               >
                 Browse Provinces
-              </button>
+              </Link>
               <a
                 href="/api/docs"
                 target="_blank"
