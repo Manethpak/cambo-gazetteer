@@ -7,7 +7,7 @@ import { createPaginatedResponse, calculateOffset } from "~/utils/pagination";
  * Get all provinces and municipalities (no pagination needed - small dataset)
  */
 export async function getProvinces(
-  db: Database
+  db: Database,
 ): Promise<PaginatedResponse<AdministrativeUnit>> {
   const provinces = await db
     .select()
@@ -15,10 +15,10 @@ export async function getProvinces(
     .where(
       or(
         eq(administrativeUnits.type, "province"),
-        eq(administrativeUnits.type, "municipality")
-      )
+        eq(administrativeUnits.type, "municipality"),
+      ),
     )
-    .orderBy(administrativeUnits.nameEn);
+    .orderBy(administrativeUnits.name_en);
 
   // Return all provinces without pagination since it's a small dataset
   return {
@@ -41,7 +41,7 @@ export async function getDistricts(
   db: Database,
   page: number,
   limit: number,
-  provinceCode?: string
+  provinceCode?: string,
 ): Promise<PaginatedResponse<AdministrativeUnit> & { provinceCode?: string }> {
   const offset = calculateOffset(page, limit);
 
@@ -53,8 +53,8 @@ export async function getDistricts(
       .where(
         and(
           eq(administrativeUnits.type, "district"),
-          eq(administrativeUnits.parentCode, provinceCode)
-        )
+          eq(administrativeUnits.parentCode, provinceCode),
+        ),
       );
 
     // Get paginated data
@@ -64,10 +64,10 @@ export async function getDistricts(
       .where(
         and(
           eq(administrativeUnits.type, "district"),
-          eq(administrativeUnits.parentCode, provinceCode)
-        )
+          eq(administrativeUnits.parentCode, provinceCode),
+        ),
       )
-      .orderBy(administrativeUnits.nameEn)
+      .orderBy(administrativeUnits.name_en)
       .limit(limit)
       .offset(offset);
 
@@ -88,7 +88,7 @@ export async function getDistricts(
     .select()
     .from(administrativeUnits)
     .where(eq(administrativeUnits.type, "district"))
-    .orderBy(administrativeUnits.nameEn)
+    .orderBy(administrativeUnits.name_en)
     .limit(limit)
     .offset(offset);
 
@@ -102,7 +102,7 @@ export async function getCommunes(
   db: Database,
   page: number,
   limit: number,
-  districtCode?: string
+  districtCode?: string,
 ): Promise<PaginatedResponse<AdministrativeUnit> & { districtCode?: string }> {
   const offset = calculateOffset(page, limit);
 
@@ -114,8 +114,8 @@ export async function getCommunes(
       .where(
         and(
           eq(administrativeUnits.type, "commune"),
-          eq(administrativeUnits.parentCode, districtCode)
-        )
+          eq(administrativeUnits.parentCode, districtCode),
+        ),
       );
 
     // Get paginated data
@@ -125,10 +125,10 @@ export async function getCommunes(
       .where(
         and(
           eq(administrativeUnits.type, "commune"),
-          eq(administrativeUnits.parentCode, districtCode)
-        )
+          eq(administrativeUnits.parentCode, districtCode),
+        ),
       )
-      .orderBy(administrativeUnits.nameEn)
+      .orderBy(administrativeUnits.name_en)
       .limit(limit)
       .offset(offset);
 
@@ -149,7 +149,7 @@ export async function getCommunes(
     .select()
     .from(administrativeUnits)
     .where(eq(administrativeUnits.type, "commune"))
-    .orderBy(administrativeUnits.nameEn)
+    .orderBy(administrativeUnits.name_en)
     .limit(limit)
     .offset(offset);
 
@@ -163,7 +163,7 @@ export async function getVillages(
   db: Database,
   page: number,
   limit: number,
-  communeCode?: string
+  communeCode?: string,
 ): Promise<PaginatedResponse<AdministrativeUnit> & { communeCode?: string }> {
   const offset = calculateOffset(page, limit);
 
@@ -175,8 +175,8 @@ export async function getVillages(
       .where(
         and(
           eq(administrativeUnits.type, "village"),
-          eq(administrativeUnits.parentCode, communeCode)
-        )
+          eq(administrativeUnits.parentCode, communeCode),
+        ),
       );
 
     // Get paginated data
@@ -186,10 +186,10 @@ export async function getVillages(
       .where(
         and(
           eq(administrativeUnits.type, "village"),
-          eq(administrativeUnits.parentCode, communeCode)
-        )
+          eq(administrativeUnits.parentCode, communeCode),
+        ),
       )
-      .orderBy(administrativeUnits.nameEn)
+      .orderBy(administrativeUnits.name_en)
       .limit(limit)
       .offset(offset);
 
@@ -210,7 +210,7 @@ export async function getVillages(
     .select()
     .from(administrativeUnits)
     .where(eq(administrativeUnits.type, "village"))
-    .orderBy(administrativeUnits.nameEn)
+    .orderBy(administrativeUnits.name_en)
     .limit(limit)
     .offset(offset);
 

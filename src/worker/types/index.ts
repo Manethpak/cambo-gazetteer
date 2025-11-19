@@ -25,8 +25,8 @@ export type AdministrativeUnitType =
  */
 export interface BreadcrumbItem {
   code: string;
-  nameKm: string;
-  nameEn: string;
+  name_km: string;
+  name_en: string;
   type: AdministrativeUnitType;
 }
 
@@ -36,8 +36,8 @@ export interface BreadcrumbItem {
  */
 export interface AdministrativeUnit {
   code: string;
-  nameKm: string;
-  nameEn: string;
+  name_km: string;
+  name_en: string;
   type: AdministrativeUnitType;
   parentCode: string | null;
   reference?: string | null;

@@ -120,10 +120,10 @@ export async function getStatsDetail(db: Database) {
     provinces: provincesResult.map((prov: any) => ({
       code: prov.code,
       name: prov.name,
-      nameKm: prov.name_km,
+      name_km: prov.name_km,
       type: prov.type,
-      typeEn: prov.type_en,
-      typeKm: prov.type_km,
+      type_en: prov.type_en,
+      type_km: prov.type_km,
       district: {
         Khan: prov.district_khan,
         Srok: prov.district_srok,

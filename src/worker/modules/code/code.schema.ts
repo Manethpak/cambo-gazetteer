@@ -7,8 +7,8 @@ import {
 
 const breadcrumbItemSchema = z.object({
   code: z.string(),
-  nameKm: z.string(),
-  nameEn: z.string(),
+  name_km: z.string(),
+  name_en: z.string(),
   type: administrativeUnitTypeSchema,
 });
 
@@ -19,8 +19,8 @@ const childrenCountSchema = z.object({
 
 const locationDetailSchema = z.object({
   code: z.string(),
-  nameKm: z.string(),
-  nameEn: z.string(),
+  name_km: z.string(),
+  name_en: z.string(),
   type: administrativeUnitTypeSchema,
   parentCode: z.string().nullable(),
   reference: z.string().nullable().optional(),
@@ -53,7 +53,7 @@ export const getLocationByCodeDoc = {
       code: z
         .string()
         .describe(
-          "Administrative code (e.g., '01' for province, '0101' for district, '010101' for commune, '01010101' for village)"
+          "Administrative code (e.g., '01' for province, '0101' for district, '010101' for commune, '01010101' for village)",
         ),
     }),
   },

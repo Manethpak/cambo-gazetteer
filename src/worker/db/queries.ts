@@ -105,19 +105,19 @@ export function buildBreadcrumb(ancestors: any[], current: any) {
   return [
     ...ancestors.map((a) => ({
       code: a.code,
-      nameKm: a.name_km || a.nameKm,
-      nameEn: a.name_en || a.nameEn,
+      name_km: a.name_km,
+      name_en: a.name_en,
       type: a.type,
-      typeKm: a.type_km || a.typeKm,
-      typeEn: a.type_en || a.typeEn,
+      type_km: a.type_km,
+      type_en: a.type_en,
     })),
     {
       code: current.code,
-      nameKm: current.name_km || current.nameKm,
-      nameEn: current.name_en || current.nameEn,
+      name_km: current.name_km,
+      name_en: current.name_en,
       type: current.type,
-      typeKm: current.type_km || current.typeKm,
-      typeEn: current.type_en || current.typeEn,
+      type_km: current.type_km,
+      type_en: current.type_en,
     },
   ];
 }
@@ -130,7 +130,7 @@ export async function fuzzySearch(
   db: any,
   query: string,
   limit = 20,
-  offset = 0
+  offset = 0,
 ) {
   // First, try FTS5 search
   try {
@@ -265,7 +265,7 @@ export async function searchWithHierarchy(
   db: any,
   query: string,
   limit = 20,
-  offset = 0
+  offset = 0,
 ) {
   const searchResults = await fuzzySearch(db, query, limit, offset);
 
@@ -277,10 +277,10 @@ export async function searchWithHierarchy(
       return {
         ...result,
         breadcrumb,
-        path: breadcrumb.map((b) => b.nameEn).join(", "),
-        pathKm: breadcrumb.map((b) => b.nameKm).join(", "),
+        path: breadcrumb.map((b) => b.name_en).join(", "),
+        pathKm: breadcrumb.map((b) => b.name_km).join(", "),
       };
-    })
+    }),
   );
 
   return enriched;

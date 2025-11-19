@@ -12,20 +12,20 @@ export const administrativeUnits = sqliteTable(
     code: text("code").primaryKey(),
 
     // Names in both Khmer and English
-    nameKm: text("name_km").notNull(),
-    nameEn: text("name_en").notNull(),
+    name_km: text("name_km").notNull(),
+    name_en: text("name_en").notNull(),
 
     // Type: province, municipality, district, commune, village
     type: text("type", {
       enum: ["province", "municipality", "district", "commune", "village"],
     }).notNull(),
 
-    typeEn: text("type_en"), // Original Khmer type (ស្រុក, ឃុំ, ភូមិ, ខណ្ឌ, សង្កាត់, ក្រុង)
-    typeKm: text("type_km"), // Direct English type translation (Srok, Khum, Phum, Khan, Sangkat, Krong)
+    type_en: text("type_en"), // Original Khmer type (ស្រុក, ឃុំ, ភូមិ, ខណ្ឌ, សង្កាត់, ក្រុង)
+    type_km: text("type_km"), // Direct English type translation (Srok, Khum, Phum, Khan, Sangkat, Krong)
 
     // Self-referencing foreign key for hierarchy
     parentCode: text("parent_code").references(
-      (): any => administrativeUnits.code
+      (): any => administrativeUnits.code,
     ),
 
     // Optional metadata fields from source data
@@ -35,10 +35,10 @@ export const administrativeUnits = sqliteTable(
 
     // Timestamps
     createdAt: integer("created_at", { mode: "timestamp" }).default(
-      sql`(unixepoch())`
+      sql`(unixepoch())`,
     ),
     updatedAt: integer("updated_at", { mode: "timestamp" }).default(
-      sql`(unixepoch())`
+      sql`(unixepoch())`,
     ),
   },
   (table) => ({
@@ -48,9 +48,9 @@ export const administrativeUnits = sqliteTable(
     // Composite index for type + parent queries (get all districts in a province)
     typeParentIdx: index("type_parent_idx").on(table.type, table.parentCode),
     // Index for name searches (before FTS5 kicks in)
-    nameEnIdx: index("name_en_idx").on(table.nameEn),
-    nameKmIdx: index("name_km_idx").on(table.nameKm),
-  })
+    name_enIdx: index("name_en_idx").on(table.name_en),
+    name_kmIdx: index("name_km_idx").on(table.name_km),
+  }),
 );
 
 // Type exports for TypeScript

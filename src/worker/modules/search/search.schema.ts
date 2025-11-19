@@ -30,8 +30,8 @@ export const autocompleteQuerySchema = z.object({
 
 const breadcrumbItemSchema = z.object({
   code: z.string(),
-  nameKm: z.string(),
-  nameEn: z.string(),
+  name_km: z.string(),
+  name_en: z.string(),
   type: administrativeUnitTypeSchema,
 });
 

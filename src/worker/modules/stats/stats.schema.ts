@@ -29,13 +29,13 @@ const statsDetailResponseSchema = z.object({
     z.object({
       code: z.string().describe("Province/municipality code"),
       name: z.string().describe("Province/municipality name in English"),
-      nameKm: z.string().describe("Province/municipality name in Khmer"),
+      name_km: z.string().describe("Province/municipality name in Khmer"),
       type: z.string().describe("Type: province or municipality"),
-      typeEn: z
+      type_en: z
         .string()
         .optional()
         .describe("English type (e.g., Khet, Krong)"),
-      typeKm: z.string().optional().describe("Khmer type (ខេត្ត, ក្រុង)"),
+      type_km: z.string().optional().describe("Khmer type (ខេត្ត, ក្រុង)"),
       district: z.object({
         Khan: z.number().describe("Number of Khan/ខណ្ឌ districts (urban)"),
         Srok: z.number().describe("Number of Srok/ស្រុក districts (rural)"),
@@ -53,7 +53,7 @@ const statsDetailResponseSchema = z.object({
         Phum: z.number().describe("Number of Phum/ភូមិ villages"),
         total: z.number().describe("Total number of villages/Phum (ភូមិ)"),
       }),
-    })
+    }),
   ),
   timestamp: z
     .string()
