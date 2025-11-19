@@ -38,8 +38,10 @@
     "drizzle-orm": "^0.44.7",
     "hono": "4.10.5",
     "hono-openapi": "^1.1.1",
+    "lucide-react": "^0.554.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-router-dom": "^7.9.6",
     "tailwindcss": "^4.1.17",
     "zod": "^4.1.12"
   },
@@ -86,13 +88,13 @@
   ],
   "author": "Maneth PAK <manethpak.dev@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/manethpak/cambo-geo-index#readme",
+  "homepage": "https://github.com/Manethpak/cambo-gazetteer#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/manethpak/cambo-geo-index.git"
+    "url": "https://github.com/Manethpak/cambo-gazetteer.git"
   },
   "bugs": {
-    "url": "https://github.com/manethpak/cambo-geo-index/issues"
+    "url": "https://github.com/Manethpak/cambo-gazetteer/issues"
   },
   "files": [
     "README.md",

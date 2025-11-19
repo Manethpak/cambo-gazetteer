@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.font-khmer {
+  font-family: "Noto Sans Khmer", sans-serif;
+}
