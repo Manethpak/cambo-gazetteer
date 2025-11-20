@@ -1,9 +1,19 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
-import { Map, Database, Zap, Globe } from "lucide-react";
+import { Map, Database, Zap, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { StatsResponse } from "../types";
 
 export function Home() {
   const navigate = useNavigate();
+  const [stats, setStats] = useState<StatsResponse | null>(null);
+
+  useEffect(() => {
+    fetch("/api/v1/stats")
+      .then((res) => res.json())
+      .then((data) => setStats(data))
+      .catch((err) => console.error("Failed to fetch stats", err));
+  }, []);
 
   const handleSearch = (query: string) => {
     navigate(`/search?q=${encodeURIComponent(query)}`);
@@ -103,9 +113,9 @@ export function Home() {
               delay={200}
             />
             <FeatureCard
-              icon={<Globe className="w-6 h-6 text-indigo-500" />}
-              title="Dual Language"
-              description="First-class support for both Khmer and English names across all data points."
+              icon={<Search className="w-6 h-6 text-indigo-500" />}
+              title="Bilingual Search"
+              description="Powerful full-text search functionality across the entire dataset, with seamless support for both Khmer and English."
               delay={300}
             />
           </div>
@@ -137,31 +147,37 @@ export function Home() {
               </p>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-8 border-t border-slate-200 pt-8">
-                <div>
-                  <div className="text-3xl font-bold text-slate-900 mb-1">
-                    100%
-                  </div>
-                  <div className="text-sm text-slate-500 font-medium">
-                    Open Source
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-slate-900 mb-1">
-                    16k+
-                  </div>
-                  <div className="text-sm text-slate-500 font-medium">
-                    Administrative Units
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-slate-900 mb-1">
-                    Fast
-                  </div>
-                  <div className="text-sm text-slate-500 font-medium">
-                    Edge Network
-                  </div>
-                </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4 border-t border-slate-200 pt-8">
+                <MotivationStat
+                  label="Total Units"
+                  value={stats?.total}
+                  loading={!stats}
+                />
+                <MotivationStat
+                  label="Capital"
+                  value={stats?.byType.municipalities}
+                  loading={!stats}
+                />
+                <MotivationStat
+                  label="Provinces"
+                  value={stats?.byType.provinces}
+                  loading={!stats}
+                />
+                <MotivationStat
+                  label="Districts"
+                  value={stats?.byType.districts}
+                  loading={!stats}
+                />
+                <MotivationStat
+                  label="Communes"
+                  value={stats?.byType.communes}
+                  loading={!stats}
+                />
+                <MotivationStat
+                  label="Villages"
+                  value={stats?.byType.villages}
+                  loading={!stats}
+                />
               </div>
             </div>
 
@@ -220,6 +236,29 @@ function FeatureCard({
         {title}
       </h3>
       <p className="text-slate-600 leading-relaxed">{description}</p>
+    </div>
+  );
+}
+
+function MotivationStat({
+  label,
+  value,
+  loading,
+}: {
+  label: string;
+  value?: number;
+  loading: boolean;
+}) {
+  return (
+    <div>
+      <div className="text-3xl font-bold text-slate-900 mb-1">
+        {loading ? (
+          <div className="h-9 w-16 bg-slate-200 rounded animate-pulse"></div>
+        ) : (
+          value?.toLocaleString()
+        )}
+      </div>
+      <div className="text-sm text-slate-500 font-medium">{label}</div>
     </div>
   );
 }

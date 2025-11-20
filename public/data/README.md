@@ -294,7 +294,7 @@ CREATE TABLE villages (
 # Using psql with JSON functions
 psql -d your_database -c "
 COPY administrative_units (code, name_km, name_en, type, parent_code, reference)
-FROM PROGRAM 'jq -r '.[] | [.code, .name_km, .name_en, .type, .parent_code // null, .reference // null] | @tsv' < data/gazetteer-normalized.json'
+FROM PROGRAM 'jq -r '.[] | [.code, .name_km, .name_en, .type, .parent_code // null, .reference // null] | @tsv' < public/data/gazetteer-normalized.json'
 WITH (FORMAT csv, DELIMITER E'\t', NULL 'null');
 "
 ```
@@ -308,7 +308,7 @@ import pg from 'pg';
 const { Pool } = pg;
 const pool = new Pool({ /* your config */ });
 
-const data = JSON.parse(readFileSync('data/gazetteer-normalized.json', 'utf-8'));
+const data = JSON.parse(readFileSync('public/data/gazetteer-normalized.json', 'utf-8'));
 
 for (const unit of data) {
   await pool.query(

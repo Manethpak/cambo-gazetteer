@@ -22,7 +22,7 @@
     "db:migrate:remote": "wrangler d1 migrations apply cambo-gazetteer --remote",
     "db:seed:generate": "tsx scripts/generate-seed.ts",
     "db:seed:local": "tsx scripts/seed.ts",
-    "db:seed:remote": "wrangler d1 execute cambo-gazetteer --remote --file=data/seed.sql",
+    "db:seed:remote": "wrangler d1 execute cambo-gazetteer --remote --file=public/data/seed.sql",
     "db:studio": "drizzle-kit studio",
     "db:drop": "drizzle-kit drop",
     "db:clean": "tsx scripts/clean-db.ts",

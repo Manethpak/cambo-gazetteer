@@ -50,6 +50,18 @@ export interface SearchResponse {
   error?: string;
 }
 
+export interface StatsResponse {
+  total: number;
+  byType: {
+    provinces: number;
+    municipalities: number;
+    districts: number;
+    communes: number;
+    villages: number;
+  };
+  timestamp: string;
+}
+
 export interface ApiStats {
   provinces: number;
   districts: number;

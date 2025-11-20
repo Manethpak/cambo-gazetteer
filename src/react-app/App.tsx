@@ -4,6 +4,7 @@ import { Home } from "./pages/Home";
 import { SearchPage } from "./pages/Search";
 import { ProvinceList } from "./pages/ProvinceList";
 import { Detail } from "./pages/Detail";
+import { DataSource } from "./pages/DataSource";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="provinces" element={<ProvinceList />} />
+          <Route path="datasource" element={<DataSource />} />
           <Route path="code/:code" element={<Detail />} />
         </Route>
       </Routes>

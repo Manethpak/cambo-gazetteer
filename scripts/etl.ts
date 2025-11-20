@@ -295,7 +295,8 @@ function extractData(filePath: string): AdministrativeUnit[] {
         name_en: provinceInfo.name_en,
         type: provinceInfo.type,
         type_km: provinceInfo.type === "municipality" ? "រាជធានី" : "ខេត្ត",
-        type_en: provinceInfo.type === "municipality" ? "Municipality" : "Province",
+        type_en:
+          provinceInfo.type === "municipality" ? "Municipality" : "Province",
       });
     }
   }
@@ -463,8 +464,8 @@ function transformToHierarchical(
 function main() {
   console.log("🚀 Starting ETL process for Cambodia Gazetteer Data\n");
 
-  const inputFile = join("data", "2024.10.14.xlsx");
-  const outputDir = join("data");
+  const inputFile = join("public", "data", "2024.10.14.xlsx");
+  const outputDir = join("public", "data");
 
   // Extract
   const units = extractData(inputFile);

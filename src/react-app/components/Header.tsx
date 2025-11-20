@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Map, Github } from "lucide-react";
+import { Github } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Header() {
@@ -19,9 +19,11 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="p-2 bg-indigo-600 rounded-lg group-hover:bg-indigo-700 transition-colors">
-              <Map className="w-5 h-5 text-white" />
-            </div>
+            <img
+              src="/assets/logo.png"
+              alt="Cambo Gazetteer Logo"
+              className="w-9 h-9 rounded-lg"
+            />
             <span className="font-bold text-xl text-slate-900">
               Cambo Gazetteer
             </span>
@@ -39,6 +41,12 @@ export function Header() {
               className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
             >
               Provinces
+            </Link>
+            <Link
+              to="/datasource"
+              className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+            >
+              Data Source
             </Link>
             <a
               href="/api/docs"

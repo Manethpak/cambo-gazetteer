@@ -28,7 +28,7 @@ function findLocalD1Path(): string | null {
 
   // Read seed SQL file
   const seedSQL = readFileSync(
-    join(process.cwd(), "data", "seed.sql"),
+    join(process.cwd(), "public", "data", "seed.sql"),
     "utf-8"
   );
   // Split into statements by semicolon at end of line. Keep semicolons.

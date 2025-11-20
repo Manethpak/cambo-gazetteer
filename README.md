@@ -82,7 +82,7 @@ Data sourced from:
 - [Open Development Cambodia](https://data.opendevelopmentcambodia.net/dataset/cambodia-gazetteer)
 - [NCDD Gazetteer Database](https://db.ncdd.gov.kh/gazetteer)
 
-See [data/README.md](data/README.md) for detailed data documentation.
+See [public/data/README.md](public/data/README.md) for detailed data documentation.
 
 ## License
 

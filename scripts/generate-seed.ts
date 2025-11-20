@@ -11,11 +11,16 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 // Read the normalized data
-const dataPath = join(process.cwd(), "data", "gazetteer-normalized.json");
+const dataPath = join(
+  process.cwd(),
+  "public",
+  "data",
+  "gazetteer-normalized.json"
+);
 const data = JSON.parse(readFileSync(dataPath, "utf-8"));
 
 console.log(
-  `📊 Loaded ${data.length} administrative units from gazetteer-normalized.json`,
+  `📊 Loaded ${data.length} administrative units from gazetteer-normalized.json`
 );
 
 // Group data by type for statistics
@@ -42,7 +47,7 @@ for (const unit of data) {
 
 if (duplicates.length > 0) {
   console.warn(
-    `\n⚠️  Found ${duplicates.length} duplicate codes in source data:`,
+    `\n⚠️  Found ${duplicates.length} duplicate codes in source data:`
   );
   duplicates.forEach((dup) => {
     console.warn(`   - ${dup.code}: ${dup.name_en} (${dup.name_km})`);
@@ -106,5 +111,5 @@ console.log(`   Local:  pnpm db:seed:local`);
 console.log(`   Remote: pnpm db:seed:remote`);
 console.warn(
   `\n\x1b[33mNote: wrangler > 3.103.2 is known for HashIndex error when seeding large datasets.
-      See issue for more info: https://github.com/cloudflare/workers-sdk/issues/8153\x1b[0m\n\n`,
+      See issue for more info: https://github.com/cloudflare/workers-sdk/issues/8153\x1b[0m\n\n`
 );
