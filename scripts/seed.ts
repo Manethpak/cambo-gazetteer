@@ -3,10 +3,7 @@ import { join } from "path";
 import Database from "better-sqlite3";
 
 function findLocalD1Path(): string | null {
-  const base = join(
-    process.cwd(),
-    ".wrangler/state/v3/d1/miniflare-D1DatabaseObject"
-  );
+  const base = join(process.cwd(), ".wrangler/state/v3/d1/miniflare-D1DatabaseObject");
   try {
     const files = readdirSync(base);
     const db = files.find((f) => f.endsWith(".sqlite"));
@@ -21,18 +18,15 @@ function findLocalD1Path(): string | null {
   const dbPath = findLocalD1Path();
   if (!dbPath) {
     console.error(
-      "Could not find local D1 sqlite file. Did you run 'wrangler dev' or 'db:migrate:local' at least once?"
+      "Could not find local D1 sqlite file. Did you run 'wrangler dev' or 'db:migrate:local' at least once?",
     );
     process.exit(1);
   }
 
   // Read seed SQL file
-  const seedSQL = readFileSync(
-    join(process.cwd(), "public", "data", "seed.sql"),
-    "utf-8"
-  );
+  const seedSQL = readFileSync(join(process.cwd(), "public", "data", "seed.sql"), "utf-8");
   // Split into statements by semicolon at end of line. Keep semicolons.
-  let statements = seedSQL
+  const statements = seedSQL
     .split(/;\s*\n/) // split on ; newline combos
     .map((s) => s.trim())
     .filter((s) => s.length > 0)
@@ -64,12 +58,13 @@ function findLocalD1Path(): string | null {
       console.log(`   ⏳ ${processed}/${total} (${pct}%)`);
     }
     db.exec("COMMIT;");
-  } catch (e: any) {
+  } catch (e) {
     try {
       db.exec("ROLLBACK;");
-    } catch {}
-    console.error("❌ Seeding failed");
-    console.error(e?.message || e);
+    } catch {
+      console.error("❌ Seeding failed");
+    }
+    if (e instanceof Error) console.error(e?.message || e);
     process.exit(1);
   } finally {
     const end = Date.now();
