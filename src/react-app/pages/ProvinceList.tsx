@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AdministrativeUnit } from "@/types";
-import { Loader2, Map } from "lucide-react";
+import { Loader2, Map, Search } from "lucide-react";
 import { getEnglishName, getKhmerName } from "@/libs/name";
 
 export function ProvinceList() {
   const [provinces, setProvinces] = useState<AdministrativeUnit[]>([]);
+  const [filteredProvinces, setFilteredProvinces] = useState<AdministrativeUnit[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -13,7 +15,9 @@ export function ProvinceList() {
     fetch("/api/v1/provinces")
       .then((res) => res.json())
       .then((data: { data: AdministrativeUnit[] }) => {
-        setProvinces(data.data.sort((a, b) => a.code.localeCompare(b.code)));
+        const sorted = data.data.sort((a, b) => a.code.localeCompare(b.code));
+        setProvinces(sorted);
+        setFilteredProvinces(sorted);
       })
       .catch((err) => {
         console.error(err);
@@ -21,6 +25,28 @@ export function ProvinceList() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setFilteredProvinces(provinces);
+      return;
+    }
+
+    const query = searchQuery.toLowerCase();
+    const filtered = provinces.filter((province) => {
+      const englishName = getEnglishName(province).toLowerCase();
+      const khmerName = getKhmerName(province).toLowerCase();
+      const code = province.code.toLowerCase();
+      
+      return (
+        englishName.includes(query) ||
+        khmerName.includes(query) ||
+        code.includes(query)
+      );
+    });
+    
+    setFilteredProvinces(filtered);
+  }, [searchQuery, provinces]);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -34,6 +60,28 @@ export function ProvinceList() {
         </p>
       </div>
 
+      {!loading && !error && (
+        <div className="mb-6">
+          <div className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search provinces by name or code..."
+              className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-xl shadow-sm text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+            />
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+              <Search className="w-5 h-5" />
+            </div>
+            {searchQuery && (
+              <div className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-500">
+                {filteredProvinces.length} result{filteredProvinces.length !== 1 ? 's' : ''}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {loading ? (
         <div className="flex justify-center py-12">
           <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
@@ -42,9 +90,13 @@ export function ProvinceList() {
         <div className="text-center py-12 text-red-600 bg-red-50 rounded-xl">
           {error}
         </div>
+      ) : filteredProvinces.length === 0 ? (
+        <div className="text-center py-12 bg-slate-50 rounded-xl">
+          <p className="text-slate-600">No provinces found matching "{searchQuery}"</p>
+        </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {provinces.map((province) => (
+          {filteredProvinces.map((province) => (
             <Link
               key={province.code}
               to={`/code/${province.code}`}
