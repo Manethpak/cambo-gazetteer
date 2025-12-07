@@ -38,6 +38,8 @@ export interface AdministrativeUnit {
   code: string;
   name_km: string;
   name_en: string;
+  type_km: string;
+  type_en: string;
   type: AdministrativeUnitType;
   parentCode: string | null;
   reference?: string | null;

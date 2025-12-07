@@ -1,12 +1,6 @@
 import z from "zod";
-import {
-  createResponseBuilder,
-  zodSchemaToParameters,
-} from "~/utils/openapi-utils";
-import {
-  paginatedResponseSchema,
-  paginationQuerySchema,
-} from "~/common/common.schema";
+import { createResponseBuilder, zodSchemaToParameters } from "~/utils/openapi-utils";
+import { paginatedResponseSchema, paginationQuerySchema } from "~/common/common.schema";
 import { DescribeRouteOptions } from "hono-openapi";
 
 const tags = ["Administrative"];
@@ -17,27 +11,21 @@ export const districtsQuerySchema = paginationQuerySchema.extend({
   province: z
     .string()
     .optional()
-    .describe(
-      "Filter districts by province code (e.g., '01' for Banteay Meanchey)"
-    ),
+    .describe("Filter districts by province code (e.g., '1' for Banteay Meanchey)"),
 });
 
 export const communesQuerySchema = paginationQuerySchema.extend({
   district: z
     .string()
     .optional()
-    .describe(
-      "Filter communes by district code (e.g., '0101' for Serei Saophoan)"
-    ),
+    .describe("Filter communes by district code (e.g., '101' for Serei Saophoan)"),
 });
 
 export const villagesQuerySchema = paginationQuerySchema.extend({
   commune: z
     .string()
     .optional()
-    .describe(
-      "Filter villages by commune code (e.g., '010101' for Serei Saophoan)"
-    ),
+    .describe("Filter villages by commune code (e.g., '10101' for Serei Saophoan)"),
 });
 
 /**

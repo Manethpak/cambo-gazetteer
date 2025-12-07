@@ -1,11 +1,13 @@
 import { sql } from "drizzle-orm";
+import { DrizzleD1Database } from "drizzle-orm/d1";
+import { AdministrativeUnit } from "~/types";
 
 /**
  * Get all ancestors (parent chain) for a given administrative unit
  * Returns array ordered from root (province) to immediate parent
  */
-export async function getAncestors(db: any, code: string) {
-  const result = await db.all(sql`
+export async function getAncestors(db: DrizzleD1Database, code: string) {
+  const result = await db.all<AdministrativeUnit>(sql`
     WITH RECURSIVE ancestor_tree AS (
       -- Start with the current node
       SELECT code, name_km, name_en, type, type_km, type_en, parent_code, 0 as level
@@ -31,7 +33,7 @@ export async function getAncestors(db: any, code: string) {
  * Get immediate descendants (direct children only) for a given administrative unit
  * Returns array with only 1 level of children
  */
-export async function getDescendants(db: any, code: string) {
+export async function getDescendants(db: DrizzleD1Database, code: string) {
   const result = await db.all(sql`
     SELECT au.code, au.name_km, au.name_en, au.type, au.type_km, au.type_en, au.parent_code
     FROM administrative_units au
@@ -45,7 +47,7 @@ export async function getDescendants(db: any, code: string) {
 /**
  * Get siblings (units with same parent) for a given administrative unit
  */
-export async function getSiblings(db: any, code: string, limit = 10) {
+export async function getSiblings(db: DrizzleD1Database, code: string, limit = 10) {
   const result = await db.all(sql`
     SELECT s.code, s.name_km, s.name_en, s.type, s.type_km, s.type_en
     FROM administrative_units current
@@ -61,7 +63,7 @@ export async function getSiblings(db: any, code: string, limit = 10) {
 /**
  * Get immediate children count grouped by type
  */
-export async function getChildrenCount(db: any, code: string) {
+export async function getChildrenCount(db: DrizzleD1Database, code: string) {
   const result = await db.all(sql`
     SELECT COUNT(*) as count, type
     FROM administrative_units
@@ -76,15 +78,14 @@ export async function getChildrenCount(db: any, code: string) {
  * Get full hierarchy context for a single administrative unit
  * Includes ancestors, descendants, siblings, and the current unit
  */
-export async function getFullHierarchy(db: any, code: string) {
-  const [ancestors, descendants, siblings, current, childrenCount] =
-    await Promise.all([
-      getAncestors(db, code),
-      getDescendants(db, code),
-      getSiblings(db, code),
-      db.all(sql`SELECT * FROM administrative_units WHERE code = ${code}`),
-      getChildrenCount(db, code),
-    ]);
+export async function getFullHierarchy(db: DrizzleD1Database, code: string) {
+  const [ancestors, descendants, siblings, current, childrenCount] = await Promise.all([
+    getAncestors(db, code),
+    getDescendants(db, code),
+    getSiblings(db, code),
+    db.all(sql`SELECT * FROM administrative_units WHERE code = ${code}`),
+    getChildrenCount(db, code),
+  ]);
 
   return {
     current: current?.[0],
@@ -99,7 +100,7 @@ export async function getFullHierarchy(db: any, code: string) {
  * Build breadcrumb trail from ancestors and current unit
  * Returns array from root to current
  */
-export function buildBreadcrumb(ancestors: any[], current: any) {
+export function buildBreadcrumb(ancestors: AdministrativeUnit[], current: AdministrativeUnit) {
   if (!current) return [];
 
   return [
@@ -127,17 +128,17 @@ export function buildBreadcrumb(ancestors: any[], current: any) {
  * Falls back to LIKE search if FTS5 is not available
  */
 export async function fuzzySearch(
-  db: any,
+  db: DrizzleD1Database,
   query: string,
   limit = 20,
   offset = 0,
-) {
+): Promise<AdministrativeUnit[]> {
   // First, try FTS5 search
   try {
     // Sanitize query for FTS5 by escaping single quotes
     const sanitizedQuery = query.replace(/'/g, "''");
 
-    const ftsResult = await db.all(sql`
+    const ftsResult = await db.all<AdministrativeUnit>(sql`
       SELECT 
         au.code, 
         au.name_km, 
@@ -157,7 +158,7 @@ export async function fuzzySearch(
     return ftsResult || [];
   } catch {
     // Fallback to LIKE search if FTS5 table doesn't exist
-    const likeResult = await db.all(sql`
+    const likeResult = await db.all<AdministrativeUnit>(sql`
       SELECT code, name_km, name_en, type, parent_code, type_km, type_en
       FROM administrative_units
       WHERE name_en LIKE ${"%" + query + "%"} 
@@ -183,12 +184,12 @@ export async function fuzzySearch(
 /**
  * Get total count for fuzzy search
  */
-export async function fuzzySearchCount(db: any, query: string) {
+export async function fuzzySearchCount(db: DrizzleD1Database, query: string): Promise<number> {
   try {
     // Sanitize query for FTS5 by escaping single quotes
     const sanitizedQuery = query.replace(/'/g, "''");
 
-    const ftsResult = await db.all(sql`
+    const ftsResult = await db.all<{ count: number }>(sql`
       SELECT COUNT(*) as count
       FROM administrative_units_fts fts
       WHERE administrative_units_fts MATCH ${sql.raw(`'${sanitizedQuery}'`)}
@@ -196,7 +197,7 @@ export async function fuzzySearchCount(db: any, query: string) {
 
     return ftsResult?.[0]?.count || 0;
   } catch {
-    const likeResult = await db.all(sql`
+    const likeResult = await db.all<{ count: number }>(sql`
       SELECT COUNT(*) as count
       FROM administrative_units
       WHERE name_en LIKE ${"%" + query + "%"} 
@@ -212,13 +213,17 @@ export async function fuzzySearchCount(db: any, query: string) {
  * Autocomplete search (prefix matching)
  * Optimized for typeahead/autocomplete use cases
  */
-export async function autocompleteSearch(db: any, query: string, limit = 10) {
+export async function autocompleteSearch(
+  db: DrizzleD1Database,
+  query: string,
+  limit = 10,
+): Promise<AdministrativeUnit[]> {
   try {
     // Sanitize query for FTS5 by escaping single quotes
     const sanitizedQuery = query.replace(/'/g, "''");
 
     // Try FTS5 prefix search
-    const ftsResult = await db.all(sql`
+    const ftsResult = await db.all<AdministrativeUnit>(sql`
       SELECT 
         au.code, 
         au.name_km, 
@@ -237,7 +242,7 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
     return ftsResult || [];
   } catch {
     // Fallback to LIKE prefix search
-    const likeResult = await db.all(sql`
+    const likeResult = await db.all<AdministrativeUnit>(sql`
       SELECT code, name_km, name_en, type, type_km, type_en, parent_code
       FROM administrative_units
       WHERE name_en LIKE ${query + "%"} 
@@ -262,7 +267,7 @@ export async function autocompleteSearch(db: any, query: string, limit = 10) {
  * Returns search results enriched with breadcrumb trails
  */
 export async function searchWithHierarchy(
-  db: any,
+  db: DrizzleD1Database,
   query: string,
   limit = 20,
   offset = 0,
@@ -270,7 +275,7 @@ export async function searchWithHierarchy(
   const searchResults = await fuzzySearch(db, query, limit, offset);
 
   const enriched = await Promise.all(
-    searchResults.map(async (result: any) => {
+    searchResults.map(async (result) => {
       const ancestors = await getAncestors(db, result.code);
       const breadcrumb = buildBreadcrumb(ancestors, result);
 
