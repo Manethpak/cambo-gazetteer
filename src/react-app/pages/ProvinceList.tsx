@@ -15,7 +15,7 @@ export function ProvinceList() {
     fetch("/api/v1/provinces")
       .then((res) => res.json())
       .then((data: { data: AdministrativeUnit[] }) => {
-        const sorted = data.data.sort((a, b) => a.code.localeCompare(b.code));
+        const sorted = data.data.sort((a, b) => Number(a.code) - Number(b.code));
         setProvinces(sorted);
         setFilteredProvinces(sorted);
       })

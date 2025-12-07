@@ -1,11 +1,4 @@
-import {
-  Download,
-  FileJson,
-  Database,
-  ExternalLink,
-  Info,
-  FileSpreadsheet,
-} from "lucide-react";
+import { Download, FileJson, Database, ExternalLink, Info, FileSpreadsheet } from "lucide-react";
 
 export function DataSource() {
   const files = [
@@ -15,9 +8,7 @@ export function DataSource() {
         "Original Excel dataset sourced from Open Development Cambodia. Contains raw data sheets.",
       size: "~1.5 MB",
       path: "/data/2024.10.14.xlsx",
-      icon: (
-        <FileSpreadsheet className="w-6 h-6 text-emerald-600 group-hover:text-emerald-700" />
-      ),
+      icon: <FileSpreadsheet className="w-6 h-6 text-emerald-600 group-hover:text-emerald-700" />,
     },
     {
       name: "gazetteer-normalized.json",
@@ -25,19 +16,14 @@ export function DataSource() {
         "Flat list of all administrative units with parent references. Ideal for database seeding or flat-file processing.",
       size: "~1.8 MB",
       path: "/data/gazetteer-normalized.json",
-      icon: (
-        <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />
-      ),
+      icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
     },
     {
       name: "gazetteer-stats.json",
-      description:
-        "Summary statistics and counts of administrative units by type.",
+      description: "Summary statistics and counts of administrative units by type.",
       size: "~1 KB",
       path: "/data/gazetteer-stats.json",
-      icon: (
-        <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />
-      ),
+      icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
     },
     {
       name: "provinces.json",
@@ -45,9 +31,7 @@ export function DataSource() {
         "Lightweight list of just the provinces and municipalities. Perfect for simple dropdowns or high-level maps.",
       size: "~5 KB",
       path: "/data/provinces.json",
-      icon: (
-        <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />
-      ),
+      icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
     },
   ];
 
@@ -61,12 +45,10 @@ export function DataSource() {
               <Database className="w-4 h-4" />
               Open Data
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Data Sources & Downloads
-            </h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">Data Sources & Downloads</h1>
             <p className="text-xl text-slate-300 max-w-2xl mx-auto">
-              Transparent, open-source, and ready for your next project.
-              Download the raw datasets or learn about our sources.
+              Transparent, open-source, and ready for your next project. Download the raw datasets
+              or learn about our sources.
             </p>
           </div>
         </div>
@@ -81,18 +63,12 @@ export function DataSource() {
                 <Info className="w-8 h-8 text-indigo-600" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-4">
-                  Primary Data Source
-                </h2>
+                <h2 className="text-2xl font-bold text-slate-900 mb-4">Primary Data Source</h2>
                 <p className="text-slate-600 mb-6 leading-relaxed">
-                  The geographical data used in this project is primarily
-                  sourced from
-                  <strong className="text-slate-900">
-                    {" "}
-                    Open Development Cambodia (ODC)
-                  </strong>
-                  . We have processed and normalized this data to provide a
-                  developer-friendly API and consistent JSON formats.
+                  The geographical data used in this project is primarily sourced from
+                  <strong className="text-slate-900"> Open Development Cambodia (ODC)</strong>. We
+                  have processed and normalized this data to provide a developer-friendly API and
+                  consistent JSON formats.
                 </p>
                 <div className="flex flex-wrap gap-4">
                   <a
@@ -129,9 +105,7 @@ export function DataSource() {
                       <h3 className="text-lg font-bold text-slate-900 mb-1 font-mono">
                         {file.name}
                       </h3>
-                      <p className="text-slate-600 text-sm mb-2">
-                        {file.description}
-                      </p>
+                      <p className="text-slate-600 text-sm mb-2">{file.description}</p>
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
                         {file.size}
                       </span>
@@ -144,7 +118,7 @@ export function DataSource() {
                     className="flex items-center justify-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-lg font-medium hover:bg-indigo-600 transition-colors active:scale-95 whitespace-nowrap"
                   >
                     <Download className="w-4 h-4" />
-                    Download JSON
+                    Download
                   </a>
                 </div>
               </div>
@@ -153,10 +127,7 @@ export function DataSource() {
 
           {/* License Info */}
           <div className="mt-12 text-center text-slate-500 text-sm">
-            <p>
-              Data is licensed under the Open Data Commons Open Database License
-              (ODbL).
-            </p>
+            <p>Data is licensed under the Open Data Commons Open Database License (ODbL).</p>
           </div>
         </div>
       </div>
