@@ -1,4 +1,5 @@
 export enum Type {
+  MUNICIPALTY = "municipality",
   PROVINCE = "province",
   DISTRICT = "district",
   COMMUNE = "commune",
@@ -40,6 +41,7 @@ export interface SearchResult {
   name_km: string;
   type: Type;
   path: string;
+  pathKm: string;
   match_quality?: number;
 }
 

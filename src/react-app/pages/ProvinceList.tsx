@@ -37,26 +37,20 @@ export function ProvinceList() {
       const englishName = getEnglishName(province).toLowerCase();
       const khmerName = getKhmerName(province).toLowerCase();
       const code = province.code.toLowerCase();
-      
-      return (
-        englishName.includes(query) ||
-        khmerName.includes(query) ||
-        code.includes(query)
-      );
+
+      return englishName.includes(query) || khmerName.includes(query) || code.includes(query);
     });
-    
+
     setFilteredProvinces(filtered);
   }, [searchQuery, provinces]);
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Provinces of Cambodia
-        </h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Provinces of Cambodia</h1>
         <p className="text-slate-600">
-          Browse all 24 provinces and the Autonomous Municipality of Phnom Penh
-          of the Kingdom of Cambodia.
+          Browse all 24 provinces and the Autonomous Municipality of Phnom Penh of the Kingdom of
+          Cambodia.
         </p>
       </div>
 
@@ -75,7 +69,7 @@ export function ProvinceList() {
             </div>
             {searchQuery && (
               <div className="absolute right-4 top-1/2 -translate-y-1/2 text-sm text-slate-500">
-                {filteredProvinces.length} result{filteredProvinces.length !== 1 ? 's' : ''}
+                {filteredProvinces.length} result{filteredProvinces.length !== 1 ? "s" : ""}
               </div>
             )}
           </div>
@@ -87,9 +81,7 @@ export function ProvinceList() {
           <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
         </div>
       ) : error ? (
-        <div className="text-center py-12 text-red-600 bg-red-50 rounded-xl">
-          {error}
-        </div>
+        <div className="text-center py-12 text-red-600 bg-red-50 rounded-xl">{error}</div>
       ) : filteredProvinces.length === 0 ? (
         <div className="text-center py-12 bg-slate-50 rounded-xl">
           <p className="text-slate-600">No provinces found matching "{searchQuery}"</p>
@@ -115,9 +107,7 @@ export function ProvinceList() {
                 <h3 className="text-lg font-bold text-slate-800 mb-1 group-hover:text-indigo-700 transition-colors">
                   {getEnglishName(province)}
                 </h3>
-                <h4 className="text-lg font-khmer text-slate-700 mb-4">
-{getKhmerName(province)}
-                </h4>
+                <h4 className="text-lg font-khmer text-slate-700 mb-4">{getKhmerName(province)}</h4>
 
                 <div className="flex items-center text-sm text-slate-500">
                   <span className="group-hover:translate-x-1 transition-transform duration-300">
