@@ -3,9 +3,7 @@ import { Github } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Header() {
-  const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">(
-    "checking",
-  );
+  const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">("checking");
 
   useEffect(() => {
     fetch("/api/health")
@@ -19,22 +17,16 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2 group">
-            <img
-              src="/assets/logo.png"
-              alt="Cambo Gazetteer Logo"
-              className="w-9 h-9 rounded-lg"
-            />
-            <span className="font-bold text-xl text-slate-900">
-              Cambo Gazetteer
-            </span>
+            <img src="/assets/logo.png" alt="Cambo Gazetteer Logo" className="w-9 h-9 rounded-lg" />
+            <span className="font-bold text-xl text-slate-900">Cambo Gazetteer</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-6">
             <Link
-              to="/"
+              to="/why"
               className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
             >
-              Home
+              Why?
             </Link>
             <Link
               to="/provinces"

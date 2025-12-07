@@ -49,9 +49,8 @@ export function Home() {
             </h1>
 
             <p className="text-xl text-slate-300 mb-12 leading-relaxed max-w-2xl mx-auto">
-              The most comprehensive, open-source API for Cambodia. Access
-              provinces, districts, communes, and villages with
-              developer-friendly tools.
+              The most comprehensive, open-source API for Cambodia. Access provinces, districts,
+              communes, and villages with developer-friendly tools.
             </p>
 
             <div className="max-w-2xl mx-auto mb-12 transform hover:scale-[1.01] transition-transform duration-300">
@@ -88,8 +87,8 @@ export function Home() {
               Everything you need to build
             </h2>
             <p className="text-lg text-slate-600">
-              A complete toolkit for handling Cambodian geographical data,
-              designed for modern development workflows.
+              A complete toolkit for handling Cambodian geographical data, designed for modern
+              development workflows.
             </p>
           </div>
 
@@ -141,18 +140,28 @@ export function Home() {
                 of Cambodia's digital infrastructure.
               </h2>
               <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Reliable geographical data shouldn't be a luxury. It's a
-                fundamental building block for modern applications, yet it has
-                been surprisingly hard to access—until now.
+                Reliable geographical data shouldn't be a luxury. It's a fundamental building block
+                for modern applications, yet it has been surprisingly hard to access—until now.
               </p>
+
+              <Link
+                to="/why"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 mb-8"
+              >
+                Learn Why This Matters
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </Link>
 
               {/* Stats */}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4 border-t border-slate-200 pt-8">
-                <MotivationStat
-                  label="Total Units"
-                  value={stats?.total}
-                  loading={!stats}
-                />
+                <MotivationStat label="Total Units" value={stats?.total} loading={!stats} />
                 <MotivationStat
                   label="Capital"
                   value={stats?.byType.municipalities}
@@ -168,16 +177,8 @@ export function Home() {
                   value={stats?.byType.districts}
                   loading={!stats}
                 />
-                <MotivationStat
-                  label="Communes"
-                  value={stats?.byType.communes}
-                  loading={!stats}
-                />
-                <MotivationStat
-                  label="Villages"
-                  value={stats?.byType.villages}
-                  loading={!stats}
-                />
+                <MotivationStat label="Communes" value={stats?.byType.communes} loading={!stats} />
+                <MotivationStat label="Villages" value={stats?.byType.villages} loading={!stats} />
               </div>
             </div>
 
@@ -191,18 +192,35 @@ export function Home() {
 
                 <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 relative z-10">
                   <p className="text-slate-700 mb-6 leading-relaxed text-lg">
-                    As a developer, I've lost count of how many times I've
-                    needed a simple, clean list of Cambodian provinces or
-                    districts, only to find broken links, outdated PDFs, or
-                    expensive enterprise APIs.
+                    As a developer, I've lost count of how many times I've needed a simple, clean
+                    list of Cambodian provinces or districts, only to find broken links, outdated
+                    PDFs, or expensive enterprise APIs.
                   </p>
                   <p className="text-slate-700 mb-8 leading-relaxed text-lg">
-                    I realized that if I was struggling with this, thousands of
-                    other developers were too. Innovation shouldn't be stifled
-                    by a lack of basic data. That's why I built this
-                    Gazetteer—to provide a free, fast, and reliable standard for
+                    I realized that if I was struggling with this, thousands of other developers
+                    were too. Innovation shouldn't be stifled by a lack of basic data. That's why I
+                    built this Gazetteer—to provide a free, fast, and reliable standard for
                     everyone.
                   </p>
+                  <Link
+                    to="/why"
+                    className="text-indigo-600 font-semibold hover:text-indigo-700 inline-flex items-center gap-1 group"
+                  >
+                    Read the full story
+                    <svg
+                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </Link>
                 </div>
               </div>
             </div>
