@@ -8,3 +8,5 @@ type Bindings = {
 export const dbClient = (env: Bindings) => {
   return drizzle(env.cambo_gazetteer, { schema });
 };
+
+export type DatabaseType = ReturnType<typeof dbClient>;

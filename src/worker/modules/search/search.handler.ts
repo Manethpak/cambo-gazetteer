@@ -1,13 +1,13 @@
 import { calculateOffset, createPaginatedResponse } from "~/utils/pagination";
 import { AutocompleteResponse, PaginatedSearchResponse } from "~/types";
 import { fuzzySearchCount, searchWithHierarchy, autocompleteSearch } from "~/db/queries";
-import { DrizzleD1Database } from "drizzle-orm/d1";
+import { type DatabaseType } from "~/db";
 
 /**
  * Search with hierarchy context and pagination
  */
 export async function search(
-  db: DrizzleD1Database,
+  db: DatabaseType,
   query: string,
   page: number,
   limit: number,
@@ -30,7 +30,7 @@ export async function search(
  * Autocomplete search for typeahead
  */
 export async function autocomplete(
-  db: DrizzleD1Database,
+  db: DatabaseType,
   query: string,
   limit = 10,
 ): Promise<AutocompleteResponse> {

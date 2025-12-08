@@ -1,13 +1,10 @@
-import type { Database, LocationDetail } from "~/types";
 import { getFullHierarchy, buildBreadcrumb } from "~/db/queries";
+import { DatabaseType } from "~/db";
 
 /**
  * Get location details by code with full hierarchy context
  */
-export async function getLocationByCode(
-  db: Database,
-  code: string
-): Promise<LocationDetail | null> {
+export async function getLocationByCode(db: DatabaseType, code: string) {
   const hierarchy = await getFullHierarchy(db, code);
 
   if (!hierarchy.current) {
