@@ -52,22 +52,16 @@ export function Header() {
 
           <nav className="hidden lg:flex items-center gap-8">
             <Link
-              to="/provinces"
+              to="/explore"
               className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
             >
-              Provinces
+              Explore
             </Link>
             <Link
               to="/datasource"
               className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
             >
               Data Source
-            </Link>
-            <Link
-              to="/why"
-              className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
-            >
-              The Goal
             </Link>
           </nav>
         </div>
@@ -132,11 +126,11 @@ export function Header() {
               Why?
             </Link>
             <Link
-              to="/provinces"
+              to="/explore"
               onClick={handleLinkClick}
               className="px-4 py-3 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
             >
-              Provinces
+              Explore
             </Link>
             <Link
               to="/datasource"

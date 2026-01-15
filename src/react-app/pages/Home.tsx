@@ -22,10 +22,10 @@ export function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-[85vh] flex items-center justify-center bg-slate-950 text-white py-20 overflow-hidden">
+      <section className="relative min-h-[75vh] flex items-center justify-center bg-slate-950 text-white py-24 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 mix-blend-soft-light"></div>
-        <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/95 to-indigo-950/50"></div>
+        <div className="absolute inset-0 bg-linear-to-tr from-slate-950 via-slate-950/95 to-indigo-950/50"></div>
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse"></div>
@@ -37,39 +37,39 @@ export function Home() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-xs font-semibold mb-10 backdrop-blur-md animate-fade-in">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-xs font-semibold mb-12 backdrop-blur-md animate-fade-in">
               <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-ping"></span>
               API v1.0 NOW LIVE
             </div>
 
-            <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.9] animate-slide-up">
+            <h1 className="text-4xl md:text-7xl font-black mb-6 tracking-tighter leading-[0.9] animate-slide-up">
               Cambodia's <br />
               <span className="gradient-text premium-gradient">
                 Digital Map
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-2xl mx-auto font-medium">
+            <div className="max-w-3xl mx-auto mb-8 transform hover:scale-[1.01] transition-all duration-500 shadow-2xl shadow-indigo-500/20">
+              <SearchBar onSearch={handleSearch} />
+            </div>
+
+            <p className="text-sm md:text-base text-slate-400 mb-10 leading-relaxed max-w-2xl mx-auto font-medium opacity-80">
               Seamless access to 16,000+ administrative units.{" "}
               <br className="hidden md:block" />
               Built for speed, reliability, and modern developer experience.
             </p>
 
-            <div className="max-w-2xl mx-auto mb-16 transform hover:scale-[1.02] transition-all duration-500 shadow-2xl shadow-indigo-500/10">
-              <SearchBar onSearch={handleSearch} />
-            </div>
-
             <div className="flex flex-wrap justify-center gap-6">
               <Link
-                to="/provinces"
-                className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all hover:shadow-[0_0_40px_rgba(79,70,229,0.3)] active:scale-95"
+                to="/explore"
+                className="px-8 py-3.5 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all hover:shadow-[0_0_40px_rgba(79,70,229,0.3)] active:scale-95"
               >
-                Explore Provinces
+                Explore data sets
               </Link>
               <a
                 href="/api/docs"
                 target="_blank"
-                className="px-8 py-4 bg-white/5 text-white rounded-2xl font-bold border border-white/10 hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm"
+                className="px-8 py-3.5 bg-white/5 text-white rounded-2xl font-bold border border-white/10 hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm"
               >
                 Developer API
               </a>
@@ -136,25 +136,7 @@ export function Home() {
                 boundaries so you don't have to.
               </p>
             </div>
-            <Link
-              to="/why"
-              className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors flex items-center gap-2 group mb-2"
-            >
-              Learn the architecture
-              <svg
-                className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </Link>
+
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
@@ -179,7 +161,7 @@ export function Home() {
 
       {/* Simplified Motivation CTA */}
       <section className="py-24 bg-indigo-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-indigo-700 to-purple-700 opacity-90"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-indigo-700 to-purple-700 opacity-90"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight">
             Built for developers, by developers.

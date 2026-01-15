@@ -6,7 +6,7 @@ export function DataSource() {
       name: "2024.10.14.xlsx",
       description:
         "Original Excel dataset sourced from Open Development Cambodia. Contains raw data sheets.",
-      size: "~1.5 MB",
+      size: "990 KB",
       path: "/data/2024.10.14.xlsx",
       icon: <FileSpreadsheet className="w-6 h-6 text-emerald-600 group-hover:text-emerald-700" />,
     },
@@ -14,14 +14,22 @@ export function DataSource() {
       name: "gazetteer-normalized.json",
       description:
         "Flat list of all administrative units with parent references. Ideal for database seeding or flat-file processing.",
-      size: "~1.8 MB",
+      size: "5.0 MB",
       path: "/data/gazetteer-normalized.json",
+      icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
+    },
+    {
+      name: "postal-normalized.json",
+      description:
+        "Postal codes mapped to administrative units across Cambodia. Normalized and ready for integration.",
+      size: "438 KB",
+      path: "/data/postal-normalized.json",
       icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
     },
     {
       name: "gazetteer-stats.json",
       description: "Summary statistics and counts of administrative units by type.",
-      size: "~1 KB",
+      size: "1 KB",
       path: "/data/gazetteer-stats.json",
       icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
     },
@@ -29,7 +37,7 @@ export function DataSource() {
       name: "provinces.json",
       description:
         "Lightweight list of just the provinces and municipalities. Perfect for simple dropdowns or high-level maps.",
-      size: "~5 KB",
+      size: "5 KB",
       path: "/data/provinces.json",
       icon: <FileJson className="w-6 h-6 text-slate-500 group-hover:text-indigo-600" />,
     },

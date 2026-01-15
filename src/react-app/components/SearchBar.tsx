@@ -33,11 +33,11 @@ export function SearchBar({
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={placeholder}
-          className="w-full pl-12 pr-4 py-4 bg-white border border-slate-200 rounded-xl shadow-sm text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+          className="w-full pl-14 pr-36 py-4 bg-white border border-slate-200 rounded-2xl shadow-sm text-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all placeholder:text-slate-400"
         />
-        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">
+        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400">
           {loading ? (
-            <Loader2 className="w-6 h-6 animate-spin" />
+            <Loader2 className="w-6 h-6 animate-spin text-brand-600" />
           ) : (
             <Search className="w-6 h-6" />
           )}
@@ -45,7 +45,7 @@ export function SearchBar({
         <button
           type="submit"
           disabled={loading || !query.trim()}
-          className="absolute right-2 top-1/2 -translate-y-1/2 px-4 py-2 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="absolute right-2.5 top-1/2 -translate-y-1/2 px-6 py-2.5 bg-brand-600 text-white rounded-xl font-semibold hover:bg-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all hover:shadow-lg hover:shadow-brand-500/30 active:scale-95"
         >
           Search
         </button>

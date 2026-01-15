@@ -5,7 +5,8 @@ import { SearchPage } from "./pages/Search";
 import { ProvinceList } from "./pages/ProvinceList";
 import { Detail } from "./pages/Detail";
 import { DataSource } from "./pages/DataSource";
-import { WhyThisProject } from "./pages/WhyThisProject";
+
+import { NotFound } from "./pages/NotFound";
 
 function App() {
   return (
@@ -14,10 +15,10 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="search" element={<SearchPage />} />
-          <Route path="provinces" element={<ProvinceList />} />
+          <Route path="explore" element={<ProvinceList />} />
           <Route path="datasource" element={<DataSource />} />
-          <Route path="why" element={<WhyThisProject />} />
           <Route path="code/:code" element={<Detail />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
     </BrowserRouter>
