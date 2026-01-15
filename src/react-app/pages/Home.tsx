@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
-import { Map, Database, Zap, Search } from "lucide-react";
+import { Map, Database, Zap, Search, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { StatsResponse } from "../types";
 
@@ -22,261 +22,234 @@ export function Home() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative bg-slate-900 text-white py-32 overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center justify-center bg-slate-950 text-white py-20 overflow-hidden">
         {/* Background Effects */}
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1580674285054-bed31e145f59?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-5 mix-blend-overlay"></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-900/50 via-slate-900/80 to-slate-900"></div>
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-7xl pointer-events-none">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-indigo-500/20 rounded-full blur-[100px] mix-blend-screen"></div>
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-[100px] mix-blend-screen"></div>
+        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 mix-blend-soft-light"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/95 to-indigo-950/50"></div>
+
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute -top-1/4 -left-1/4 w-[600px] h-[600px] bg-indigo-500/10 rounded-full blur-[120px] animate-pulse"></div>
+          <div
+            className="absolute -bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[120px] animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700 text-indigo-300 text-sm font-medium mb-8 backdrop-blur-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-              </span>
-              Open Source API v1.0
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-xs font-semibold mb-10 backdrop-blur-md animate-fade-in">
+              <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-ping"></span>
+              API v1.0 NOW LIVE
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight leading-tight">
-              Cambodia's Modern <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 animate-gradient bg-300%">
-                Geographical Data
+            <h1 className="text-5xl md:text-8xl font-black mb-8 tracking-tighter leading-[0.9] animate-slide-up">
+              Cambodia's <br />
+              <span className="gradient-text premium-gradient">
+                Digital Map
               </span>
             </h1>
 
-            <p className="text-xl text-slate-300 mb-12 leading-relaxed max-w-2xl mx-auto">
-              The most comprehensive, open-source API for Cambodia. Access provinces, districts,
-              communes, and villages with developer-friendly tools.
+            <p className="text-lg md:text-xl text-slate-400 mb-12 leading-relaxed max-w-2xl mx-auto font-medium">
+              Seamless access to 16,000+ administrative units.{" "}
+              <br className="hidden md:block" />
+              Built for speed, reliability, and modern developer experience.
             </p>
 
-            <div className="max-w-2xl mx-auto mb-12 transform hover:scale-[1.01] transition-transform duration-300">
+            <div className="max-w-2xl mx-auto mb-16 transform hover:scale-[1.02] transition-all duration-500 shadow-2xl shadow-indigo-500/10">
               <SearchBar onSearch={handleSearch} />
             </div>
 
-            <div className="flex flex-wrap justify-center gap-4">
+            <div className="flex flex-wrap justify-center gap-6">
               <Link
                 to="/provinces"
-                className="px-8 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-indigo-50 transition-all hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 hover:pointer"
+                className="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold hover:bg-indigo-500 transition-all hover:shadow-[0_0_40px_rgba(79,70,229,0.3)] active:scale-95"
               >
-                Browse Provinces
+                Explore Provinces
               </Link>
               <a
                 href="/api/docs"
                 target="_blank"
-                className="px-8 py-4 bg-slate-800 text-white rounded-xl font-bold hover:bg-slate-700 transition-all border border-slate-700 hover:border-slate-600 active:scale-95"
+                className="px-8 py-4 bg-white/5 text-white rounded-2xl font-bold border border-white/10 hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm"
               >
-                Read Documentation
+                Developer API
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-24 bg-white relative">
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-40 pointer-events-none">
-          <div className="absolute -top-24 -left-24 w-96 h-96 bg-indigo-200 rounded-full blur-3xl mix-blend-multiply"></div>
-        </div>
+      {/* Stats Quick Grid */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
-              Everything you need to build
-            </h2>
-            <p className="text-lg text-slate-600">
-              A complete toolkit for handling Cambodian geographical data, designed for modern
-              development workflows.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <FeatureCard
-              icon={<Zap className="w-6 h-6 text-amber-500" />}
-              title="Lightning Fast"
-              description="Powered by Cloudflare Workers, delivering JSON responses in milliseconds from the edge."
-              delay={0}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 md:gap-10">
+            <QuickStat
+              label="Provinces"
+              value={stats?.byType.provinces}
+              loading={!stats}
+              icon={<Map className="w-5 h-5 text-indigo-500" />}
             />
-            <FeatureCard
-              icon={<Database className="w-6 h-6 text-blue-500" />}
-              title="Complete Dataset"
-              description="Access over 16,000 administrative units, from provinces down to the village level."
-              delay={100}
+            <QuickStat
+              label="Capital"
+              value={stats?.byType.municipalities}
+              loading={!stats}
+              icon={<Zap className="w-5 h-5 text-amber-500" />}
             />
-            <FeatureCard
-              icon={<Map className="w-6 h-6 text-emerald-500" />}
-              title="Smart Hierarchy"
-              description="Traverse the administrative tree with ease using our parent-child relationship model."
-              delay={200}
+            <QuickStat
+              label="Districts"
+              value={stats?.byType.districts}
+              loading={!stats}
+              icon={<Search className="w-5 h-5 text-blue-500" />}
             />
-            <FeatureCard
-              icon={<Search className="w-6 h-6 text-indigo-500" />}
-              title="Bilingual Search"
-              description="Powerful full-text search functionality across the entire dataset, with seamless support for both Khmer and English."
-              delay={300}
+            <QuickStat
+              label="Communes"
+              value={stats?.byType.communes}
+              loading={!stats}
+              icon={<Database className="w-5 h-5 text-emerald-500" />}
+            />
+            <QuickStat
+              label="Villages"
+              value={stats?.byType.villages}
+              loading={!stats}
+              icon={<Zap className="w-5 h-5 text-purple-500" />}
+            />
+            <QuickStat
+              label="Total Units"
+              value={stats?.total}
+              loading={!stats}
+              icon={<Search className="w-5 h-5 text-rose-500" />}
             />
           </div>
         </div>
       </section>
 
-      {/* Why I'm Building This Section */}
-      <section className="py-24 bg-slate-50 relative">
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-200 rounded-full blur-3xl mix-blend-multiply"></div>
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex flex-col lg:flex-row gap-12 lg:gap-20 items-center">
-            {/* Left Column: Headline & Impact */}
-            <div className="lg:w-1/2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-600 text-sm font-medium mb-6">
-                <span className="w-2 h-2 rounded-full bg-indigo-600"></span>
-                The Motivation
-              </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6 leading-[1.1]">
-                Building the{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-                  missing piece
-                </span>{" "}
-                of Cambodia's digital infrastructure.
+      {/* Modern Features Grid */}
+      <section className="py-24 bg-slate-50 border-t border-slate-200">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-end justify-between mb-16 gap-4">
+            <div className="max-w-lg">
+              <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
+                Engineered for <br />
+                <span className="text-indigo-600">Performance.</span>
               </h2>
-              <p className="text-lg text-slate-600 mb-8 leading-relaxed">
-                Reliable geographical data shouldn't be a luxury. It's a fundamental building block
-                for modern applications, yet it has been surprisingly hard to access—until now.
+              <p className="text-slate-600 text-lg leading-relaxed">
+                We've handled the complexity of Cambodian administrative
+                boundaries so you don't have to.
               </p>
-
-              <Link
-                to="/why"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 transition-all hover:shadow-lg hover:shadow-indigo-500/20 active:scale-95 mb-8"
+            </div>
+            <Link
+              to="/why"
+              className="text-indigo-600 font-bold hover:text-indigo-700 transition-colors flex items-center gap-2 group mb-2"
+            >
+              Learn the architecture
+              <svg
+                className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Learn Why This Matters
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </Link>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-4 border-t border-slate-200 pt-8">
-                <MotivationStat label="Total Units" value={stats?.total} loading={!stats} />
-                <MotivationStat
-                  label="Capital"
-                  value={stats?.byType.municipalities}
-                  loading={!stats}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
                 />
-                <MotivationStat
-                  label="Provinces"
-                  value={stats?.byType.provinces}
-                  loading={!stats}
-                />
-                <MotivationStat
-                  label="Districts"
-                  value={stats?.byType.districts}
-                  loading={!stats}
-                />
-                <MotivationStat label="Communes" value={stats?.byType.communes} loading={!stats} />
-                <MotivationStat label="Villages" value={stats?.byType.villages} loading={!stats} />
-              </div>
-            </div>
+              </svg>
+            </Link>
+          </div>
 
-            {/* Right Column: The Story */}
-            <div className="lg:w-1/2 w-full">
-              <div className="relative">
-                {/* Quote Icon */}
-                <div className="absolute -top-6 -left-6 text-6xl text-indigo-100 font-serif leading-none select-none">
-                  "
-                </div>
-
-                <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 relative z-10">
-                  <p className="text-slate-700 mb-6 leading-relaxed text-lg">
-                    As a developer, I've lost count of how many times I've needed a simple, clean
-                    list of Cambodian provinces or districts, only to find broken links, outdated
-                    PDFs, or expensive enterprise APIs.
-                  </p>
-                  <p className="text-slate-700 mb-8 leading-relaxed text-lg">
-                    I realized that if I was struggling with this, thousands of other developers
-                    were too. Innovation shouldn't be stifled by a lack of basic data. That's why I
-                    built this Gazetteer—to provide a free, fast, and reliable standard for
-                    everyone.
-                  </p>
-                  <Link
-                    to="/why"
-                    className="text-indigo-600 font-semibold hover:text-indigo-700 inline-flex items-center gap-1 group"
-                  >
-                    Read the full story
-                    <svg
-                      className="w-4 h-4 group-hover:translate-x-1 transition-transform"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </Link>
-                </div>
-              </div>
-            </div>
+          <div className="grid md:grid-cols-3 gap-8">
+            <FeatureCard
+              title="Global Edge Network"
+              description="Low-latency responses served directly from Cloudflare's global edge network."
+              icon={<Zap className="w-6 h-6 text-amber-500" />}
+            />
+            <FeatureCard
+              title="Bilingual Engine"
+              description="Native support for Khmer and English search queries out of the box."
+              icon={<Search className="w-6 h-6 text-indigo-500" />}
+            />
+            <FeatureCard
+              title="Unified Schema"
+              description="Standardized administrative codes make data mapping effortless across any system."
+              icon={<Package className="w-6 h-6 text-emerald-500" />}
+            />
           </div>
         </div>
       </section>
+
+      {/* Simplified Motivation CTA */}
+      <section className="py-24 bg-indigo-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-indigo-700 to-purple-700 opacity-90"></div>
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-8 tracking-tight">
+            Built for developers, by developers.
+          </h2>
+          <p className="text-indigo-100 text-lg max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+            Open source, free, and community-driven. Join us in building a
+            better digital infrastructure for Cambodia.
+          </p>
+          <div className="flex justify-center gap-4">
+            <Link
+              to="/datasource"
+              className="px-8 py-4 bg-white text-indigo-600 rounded-2xl font-bold hover:bg-slate-50 transition-all"
+            >
+              Download Full Dataset
+            </Link>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function QuickStat({
+  label,
+  value,
+  loading,
+  icon,
+}: {
+  label: string;
+  value?: number;
+  loading: boolean;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="group">
+      <div className="mb-4 p-3 bg-slate-50 rounded-xl w-fit group-hover:bg-indigo-50 transition-colors">
+        {icon}
+      </div>
+      <div className="text-2xl font-bold text-slate-900 tracking-tight">
+        {loading ? (
+          <div className="h-8 w-20 bg-slate-100 animate-pulse rounded" />
+        ) : (
+          value?.toLocaleString()
+        )}
+      </div>
+      <div className="text-slate-500 text-sm font-semibold uppercase tracking-wider mt-1">
+        {label}
+      </div>
     </div>
   );
 }
 
 function FeatureCard({
-  icon,
   title,
   description,
-  delay,
+  icon,
 }: {
-  icon: React.ReactNode;
   title: string;
   description: string;
-  delay: number;
+  icon: React.ReactNode;
 }) {
   return (
-    <div
-      className="group p-8 rounded-2xl bg-white border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-500/5 transition-all duration-300 hover:-translate-y-1"
-      style={{ animationDelay: `${delay}ms` }}
-    >
-      <div className="w-14 h-14 rounded-2xl bg-slate-50 group-hover:bg-indigo-50 group-hover:scale-110 transition-all duration-300 flex items-center justify-center mb-6">
+    <div className="p-10 rounded-[2.5rem] bg-white border border-slate-100 hover:border-indigo-100 hover:shadow-2xl hover:shadow-indigo-500/5 transition-all duration-500 group">
+      <div className="w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center mb-8 group-hover:scale-110 group-hover:bg-indigo-50 transition-all duration-500">
         {icon}
       </div>
-      <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-indigo-600 transition-colors">
-        {title}
-      </h3>
-      <p className="text-slate-600 leading-relaxed">{description}</p>
-    </div>
-  );
-}
-
-function MotivationStat({
-  label,
-  value,
-  loading,
-}: {
-  label: string;
-  value?: number;
-  loading: boolean;
-}) {
-  return (
-    <div>
-      <div className="text-3xl font-bold text-slate-900 mb-1">
-        {loading ? (
-          <div className="h-9 w-16 bg-slate-200 rounded animate-pulse"></div>
-        ) : (
-          value?.toLocaleString()
-        )}
-      </div>
-      <div className="text-sm text-slate-500 font-medium">{label}</div>
+      <h3 className="text-xl font-bold text-slate-900 mb-4">{title}</h3>
+      <p className="text-slate-600 leading-relaxed font-medium">
+        {description}
+      </p>
     </div>
   );
 }

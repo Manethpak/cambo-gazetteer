@@ -3,7 +3,9 @@ import { Github, Search, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export function Header() {
-  const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">("checking");
+  const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">(
+    "checking"
+  );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -30,77 +32,67 @@ export function Header() {
   };
 
   return (
-    <header className="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2 group" onClick={handleLinkClick}>
-            <img src="/assets/logo.png" alt="Cambo Gazetteer Logo" className="w-9 h-9 rounded-lg" />
-            <span className="font-bold text-xl text-slate-900">Cambo Gazetteer</span>
+    <header className="bg-white/90 backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-50">
+      <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <div className="flex items-center gap-12">
+          <Link
+            to="/"
+            className="flex items-center gap-3 group shrink-0"
+            onClick={handleLinkClick}
+          >
+            <img
+              src="/assets/logo.png"
+              alt="Cambo Gazetteer Logo"
+              className="w-10 h-10 rounded-xl group-hover:rotate-6 transition-transform shadow-sm"
+            />
+            <span className="font-extrabold text-xl tracking-tighter text-slate-900">
+              Cambo Gazetteer
+            </span>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-6">
-            <Link
-              to="/why"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
-            >
-              Why?
-            </Link>
+          <nav className="hidden lg:flex items-center gap-8">
             <Link
               to="/provinces"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+              className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
             >
               Provinces
             </Link>
             <Link
               to="/datasource"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+              className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
             >
               Data Source
             </Link>
             <Link
-              to="/api/docs"
-              target="_blank"
-              className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
+              to="/why"
+              className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
             >
-              API Docs
+              The Goal
             </Link>
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-200">
             <div
               className={`w-2 h-2 rounded-full ${
                 apiStatus === "online"
-                  ? "bg-emerald-500"
+                  ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
                   : apiStatus === "offline"
-                    ? "bg-red-500"
-                    : "bg-amber-500"
+                  ? "bg-red-500 animate-pulse"
+                  : "bg-amber-500 animate-pulse"
               }`}
             />
-            <span className="text-xs font-medium text-slate-600">
-              {apiStatus === "online"
-                ? "API Online"
-                : apiStatus === "offline"
-                  ? "API Offline"
-                  : "Checking..."}
+            <span className="text-[10px] uppercase tracking-wider font-bold text-slate-500">
+              {apiStatus === "online" ? "API Online" : "System Status"}
             </span>
           </div>
-
-          {/* Search Button */}
-          <Link
-            to="/search"
-            className="p-2 text-slate-500 hover:text-indigo-600 transition-colors hover:bg-indigo-50 rounded-lg hidden lg:block"
-            aria-label="Search"
-          >
-            <Search className="w-5 h-5" />
-          </Link>
 
           <Link
             to="https://github.com/Manethpak/cambo-gazetteer"
             target="_blank"
             rel="noopener noreferrer"
-            className="p-2 text-slate-500 hover:text-slate-900 transition-colors"
+            className="p-2.5 text-slate-500 hover:text-slate-900 transition-colors bg-white border border-slate-200 rounded-xl hover:shadow-sm"
           >
             <Github className="w-5 h-5" />
           </Link>
@@ -108,10 +100,14 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="lg:hidden p-2 text-slate-500 hover:text-slate-900 transition-colors"
+            className="lg:hidden p-2.5 text-slate-500 hover:text-slate-900 transition-colors bg-slate-50 rounded-xl"
             aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
       </div>
@@ -165,16 +161,16 @@ export function Header() {
                   apiStatus === "online"
                     ? "bg-emerald-500"
                     : apiStatus === "offline"
-                      ? "bg-red-500"
-                      : "bg-amber-500"
+                    ? "bg-red-500"
+                    : "bg-amber-500"
                 }`}
               />
               <span className="text-xs font-medium text-slate-600">
                 {apiStatus === "online"
                   ? "API Online"
                   : apiStatus === "offline"
-                    ? "API Offline"
-                    : "Checking..."}
+                  ? "API Offline"
+                  : "Checking..."}
               </span>
             </div>
           </nav>
