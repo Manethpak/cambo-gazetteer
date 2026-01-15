@@ -37,6 +37,17 @@ export interface AdministrativeUnit {
   checker_note?: string;
 }
 
+export interface PostalUnit {
+  postal_code: string;
+  code: string;
+  name_km: string;
+  name_en: string;
+  type: "province" | "municipality" | "district" | "commune" | "village";
+  type_km?: string;
+  type_en?: string;
+  parent_code?: string;
+}
+
 /**
  * Load provinces data from provinces.json
  */
@@ -100,6 +111,43 @@ const typeNameMapping: Record<string, string> = {
 };
 
 /**
+ * Normalize postal code to ensure it has even length
+ * Prefix with '0' if the code length is odd
+ */
+function normalizedAdminCode(code: string): string {
+  const trimmedCode = code.trim();
+  
+  // Check if length is odd
+  if (trimmedCode.length % 2 === 1) {
+    return '0' + trimmedCode;
+  }
+  
+  return trimmedCode;
+}
+
+/**
+ * Normalize postal code for Cambodia postal system
+ * - Only use codes with 6 digits or less
+ * - Codes with more than 6 digits are ignored
+ * - Codes with less than 6 digits are padded with '0' suffix
+ */
+function normalizePostalCode(code: string): string | null {
+  const trimmedCode = normalizedAdminCode(code.trim());
+  
+  // Ignore codes longer than 6 digits
+  if (trimmedCode.length > 6) {
+    return null;
+  }
+  
+  // Pad codes less than 6 digits with '0' suffix
+  if (trimmedCode.length < 6) {
+    return trimmedCode.padEnd(6, '0');
+  }
+  
+  return trimmedCode;
+}
+
+/**
  * Determine administrative type based on code length and context
  */
 function determineType(code: string, typeKhmer: string): "district" | "commune" | "village" {
@@ -135,7 +183,7 @@ function extractData(filePath: string): AdministrativeUnit[] {
     const provinceInfo = provinceMapping[sheetName];
     if (provinceInfo) {
       allUnits.push({
-        code: provinceInfo.code,
+        code: normalizedAdminCode(provinceInfo.code),
         name_km: provinceInfo.name_km,
         name_en: provinceInfo.name_en,
         type: provinceInfo.type,
@@ -171,14 +219,14 @@ function extractData(filePath: string): AdministrativeUnit[] {
       // Skip empty rows
       if (!row.Code || !row["Name (Latin)"]) continue;
 
-      const code = String(row.Code).trim();
+      const code = (String(row.Code));
       const typeKhmer = String(row.Type || "").trim();
       const type = determineType(code, typeKhmer);
 
       // Determine parent code based on type and context
       let parentCode: string | undefined;
       if (type === "district") {
-        parentCode = provinceInfo.code;
+        parentCode = (provinceInfo.code);
         currentDistrict = code;
         currentCommune = null;
       } else if (type === "commune") {
@@ -231,12 +279,36 @@ function main() {
   writeFileSync(normalizedOutput, JSON.stringify(units, null, 2), "utf-8");
   console.log(`  ✓ ${normalizedOutput}`);
 
+  // 2. Postal code normalized format
+  const postalUnits: PostalUnit[] = [];
+  
+  for (const unit of units) {
+    const postalCode = normalizePostalCode(unit.code);
+    if (postalCode) {
+      postalUnits.push({
+        postal_code: postalCode,
+        code: unit.code,
+        name_km: unit.name_km,
+        name_en: unit.name_en,
+        type: unit.type,
+        type_km: unit.type_km,
+        type_en: unit.type_en,
+        parent_code: unit.parent_code,
+      });
+    }
+  }
+
+  const postalOutput = join(outputDir, "postal-normalized.json");
+  writeFileSync(postalOutput, JSON.stringify(postalUnits, null, 2), "utf-8");
+  console.log(`  ✓ ${postalOutput}`);
+
   const stats = {
     total_units: units.length,
     provinces: units.filter((u) => u.type === "province" || u.type === "municipality").length,
     districts: units.filter((u) => u.type === "district").length,
     communes: units.filter((u) => u.type === "commune").length,
     villages: units.filter((u) => u.type === "village").length,
+    postal_units: postalUnits.length,
     generated_at: new Date().toISOString(),
   };
 
@@ -251,6 +323,7 @@ function main() {
   console.log(`  • Districts: ${stats.districts}`);
   console.log(`  • Communes: ${stats.communes}`);
   console.log(`  • Villages: ${stats.villages}`);
+  console.log(`  • Postal units: ${stats.postal_units}`);
   console.log("\n✨ ETL process completed successfully!");
 }
 
