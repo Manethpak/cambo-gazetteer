@@ -40,6 +40,8 @@ export interface SearchResult {
   name_en: string;
   name_km: string;
   type: Type;
+  type_en: string;
+  type_km: string;
   path: string;
   pathKm: string;
   match_quality?: number;

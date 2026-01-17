@@ -37,9 +37,16 @@ export function Home() {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-xs font-semibold mb-12 backdrop-blur-md animate-fade-in">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-ping"></span>
-              API v1.0 NOW LIVE
+            <div className="flex flex-col items-center mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-indigo-300 text-xs font-semibold backdrop-blur-md animate-fade-in">
+                <span className="flex h-1.5 w-1.5 rounded-full bg-indigo-500 animate-ping"></span>
+                API v1.0 NOW LIVE
+              </div>
+              <img
+                src="/assets/logo.png"
+                alt="Cambo Gazetteer Logo"
+                className="w-24 h-24 mt-4 rounded-3xl shadow-2xl shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-500"
+              />
             </div>
 
             <h1 className="text-4xl md:text-7xl font-black mb-6 tracking-tighter leading-[0.9] animate-slide-up">
@@ -49,14 +56,14 @@ export function Home() {
               </span>
             </h1>
 
-            <div className="max-w-3xl mx-auto mb-8 transform hover:scale-[1.01] transition-all duration-500 shadow-2xl shadow-indigo-500/20">
+            <div className="max-w-3xl mx-auto mb-10 transform hover:scale-[1.01] transition-all duration-500 shadow-2xl shadow-indigo-500/20">
               <SearchBar onSearch={handleSearch} />
             </div>
 
-            <p className="text-sm md:text-base text-slate-400 mb-10 leading-relaxed max-w-2xl mx-auto font-medium opacity-80">
-              Seamless access to 16,000+ administrative units.{" "}
+            <p className="text-base md:text-lg text-slate-300 mb-12 leading-relaxed max-w-2xl mx-auto font-medium">
+              Enabling accessibility of free and open-source data.
               <br className="hidden md:block" />
-              Built for speed, reliability, and modern developer experience.
+              Providing seamless access to 16,000+ administrative units for Cambodia.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6">

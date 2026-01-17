@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { ChevronRight, ChevronDown, Folder, FolderOpen, MapPin, Loader2, Building2, Home } from "lucide-react";
 import { AdministrativeUnit, ResponseByCode, Type } from "@/types";
 import { getEnglishName, getKhmerName } from "@/libs/name";
@@ -118,15 +117,6 @@ function DirectoryItem({ unit, level }: DirectoryItemProps) {
         </div>
 
         <div className="flex items-center gap-6">
-           {/* Link to detail page */}
-          <Link 
-            to={`/code/${unit.code}`}
-            onClick={(e) => e.stopPropagation()} 
-            className="opacity-0 group-hover:opacity-100 flex items-center gap-1.5 text-xs font-bold text-brand-600 bg-brand-50 px-3 py-1.5 rounded-xl hover:bg-brand-100 transition-all border border-brand-100"
-          >
-            Details <ChevronRight className="size-3" />
-          </Link>
-          
           <span className={`
             font-mono text-sm font-bold tracking-wider px-4 py-1.5 rounded-xl transition-all w-32 text-center
             ${isOpen ? "bg-brand-600 text-white shadow-lg shadow-brand-500/20" : "bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700"}

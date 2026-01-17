@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { SearchBar } from "../components/SearchBar";
 import { SearchResult } from "../types";
 import { Loader2, Copy, Check, Search } from "lucide-react";
 import { TypeLabel } from "@/components/TypeLabel";
+import { getEnglishName, getKhmerName } from "@/libs/name";
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -37,8 +38,7 @@ export function SearchPage() {
     setSearchParams({ q: newQuery });
   };
 
-  const handleCopy = (e: React.MouseEvent, code: string) => {
-    e.preventDefault(); // Prevent navigation
+  const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code);
     setCopiedId(code);
     setTimeout(() => setCopiedId(null), 2000);
@@ -66,31 +66,26 @@ export function SearchPage() {
             </div>
             <div className="grid gap-3">
               {results.map((result) => (
-                <Link
+                <div
                   key={result.code}
-                  to={`/code/${result.code}`}
-                  className="group relative flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl hover:shadow-lg hover:shadow-brand-500/5 hover:border-brand-200 transition-all duration-300"
+                  className="group relative flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl shadow-sm"
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="mt-1">
-                       <TypeLabel type={result.type} />
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-1">
+                      <h4 className="text-xl font-bold font-khmer text-slate-900">
+                        {getKhmerName(result)}
+                      </h4>
+                      <TypeLabel type={result.type} />
                     </div>
-                    
-                    <div>
-                      <div className="flex items-baseline gap-3 mb-1">
-                        <h4 className="text-xl font-bold font-khmer text-slate-900 group-hover:text-brand-600 transition-colors">
-                          {result.name_km}
-                        </h4>
-                      </div>
-                      <h3 className="text-base text-slate-500 font-medium group-hover:text-slate-700 transition-colors">
-                        {result.name_en}
-                      </h3>
-                    </div>
+                    <h3 className="text-base text-slate-500 font-medium">
+                      {getEnglishName(result)}
+                    </h3>
                   </div>
 
                   <div className="flex items-center gap-6 pl-4">
                     <button
-                      onClick={(e) => handleCopy(e, result.code)}
+                      type="button"
+                      onClick={() => handleCopy(result.code)}
                       className="flex items-center gap-2 group/btn px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
                       title="Copy Code"
                     >
@@ -106,7 +101,7 @@ export function SearchPage() {
                       )}
                     </button>
                   </div>
-                </Link>
+                </div>
               ))}
             </div>
           </div>
