@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 export function Header() {
   const [apiStatus, setApiStatus] = useState<"checking" | "online" | "offline">(
-    "checking"
+    "checking",
   );
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -73,8 +73,8 @@ export function Header() {
                 apiStatus === "online"
                   ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"
                   : apiStatus === "offline"
-                  ? "bg-red-500 animate-pulse"
-                  : "bg-amber-500 animate-pulse"
+                    ? "bg-red-500 animate-pulse"
+                    : "bg-amber-500 animate-pulse"
               }`}
             />
             <span className="text-[10px] uppercase tracking-wider font-bold text-slate-500">
@@ -155,16 +155,16 @@ export function Header() {
                   apiStatus === "online"
                     ? "bg-emerald-500"
                     : apiStatus === "offline"
-                    ? "bg-red-500"
-                    : "bg-amber-500"
+                      ? "bg-red-500"
+                      : "bg-amber-500"
                 }`}
               />
               <span className="text-xs font-medium text-slate-600">
                 {apiStatus === "online"
                   ? "API Online"
                   : apiStatus === "offline"
-                  ? "API Offline"
-                  : "Checking..."}
+                    ? "API Offline"
+                    : "Checking..."}
               </span>
             </div>
           </nav>

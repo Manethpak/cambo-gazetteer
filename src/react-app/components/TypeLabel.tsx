@@ -1,6 +1,12 @@
 import { Type } from "@/types";
 
-export function TypeLabel({ type, className }: { type: Type; className?: string }) {
+export function TypeLabel({
+  type,
+  className,
+}: {
+  type: Type;
+  className?: string;
+}) {
   const getColors = () => {
     switch (type) {
       case Type.PROVINCE:

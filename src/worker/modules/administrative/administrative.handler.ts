@@ -6,12 +6,17 @@ import { createPaginatedResponse, calculateOffset } from "~/utils/pagination";
 /**
  * Get all provinces and municipalities (no pagination needed - small dataset)
  */
-export async function getProvinces(db: Database): Promise<PaginatedResponse<AdministrativeUnit>> {
+export async function getProvinces(
+  db: Database,
+): Promise<PaginatedResponse<AdministrativeUnit>> {
   const provinces = await db
     .select()
     .from(administrativeUnits)
     .where(
-      or(eq(administrativeUnits.type, "province"), eq(administrativeUnits.type, "municipality")),
+      or(
+        eq(administrativeUnits.type, "province"),
+        eq(administrativeUnits.type, "municipality"),
+      ),
     )
     .orderBy(administrativeUnits.code);
 

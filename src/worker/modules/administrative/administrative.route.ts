@@ -33,7 +33,7 @@ administrativeRouter.get(
     const db = dbClient(c.env);
     const result = await getProvinces(db);
     return c.json(result);
-  }
+  },
 );
 
 /**
@@ -49,13 +49,13 @@ administrativeRouter.get(
     const provinceCode = c.req.query("province");
     const { page, limit } = parsePaginationParams(
       c.req.query("page"),
-      c.req.query("limit")
+      c.req.query("limit"),
     );
     const db = dbClient(c.env);
 
     const result = await getDistricts(db, page, limit, provinceCode);
     return c.json(result);
-  }
+  },
 );
 
 /**
@@ -71,13 +71,13 @@ administrativeRouter.get(
     const districtCode = c.req.query("district");
     const { page, limit } = parsePaginationParams(
       c.req.query("page"),
-      c.req.query("limit")
+      c.req.query("limit"),
     );
     const db = dbClient(c.env);
 
     const result = await getCommunes(db, page, limit, districtCode);
     return c.json(result);
-  }
+  },
 );
 
 /**
@@ -93,13 +93,13 @@ administrativeRouter.get(
     const communeCode = c.req.query("commune");
     const { page, limit } = parsePaginationParams(
       c.req.query("page"),
-      c.req.query("limit")
+      c.req.query("limit"),
     );
     const db = dbClient(c.env);
 
     const result = await getVillages(db, page, limit, communeCode);
     return c.json(result);
-  }
+  },
 );
 
 export default administrativeRouter;

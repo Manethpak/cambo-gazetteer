@@ -22,7 +22,7 @@ export const addSearchCache = (name: string) => {
       // Normalize query: lowercase, trim, extract params
       url.searchParams.set(
         "q",
-        url.searchParams.get("q")?.toLowerCase().trim() || ""
+        url.searchParams.get("q")?.toLowerCase().trim() || "",
       );
       url.searchParams.set("page", url.searchParams.get("page") || "1");
       url.searchParams.set("limit", url.searchParams.get("limit") || "20");

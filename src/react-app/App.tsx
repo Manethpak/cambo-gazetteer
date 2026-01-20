@@ -4,7 +4,7 @@ import { Home } from "./pages/Home";
 import { SearchPage } from "./pages/Search";
 import { ProvinceList } from "./pages/ProvinceList";
 import { DataSource } from "./pages/DataSource";
-
+import { LocationPage } from "./pages/LocationPage";
 import { NotFound } from "./pages/NotFound";
 
 function App() {
@@ -16,6 +16,7 @@ function App() {
           <Route path="search" element={<SearchPage />} />
           <Route path="explore" element={<ProvinceList />} />
           <Route path="datasource" element={<DataSource />} />
+          <Route path="location/:code" element={<LocationPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

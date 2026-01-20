@@ -27,7 +27,7 @@ codeRouter.get(
     }
 
     return c.json(location);
-  }
+  },
 );
 
 export default codeRouter;

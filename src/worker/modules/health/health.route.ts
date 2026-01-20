@@ -42,7 +42,7 @@ healthRouter.get(
       },
       timestamp: new Date().toISOString(),
     });
-  }
+  },
 );
 
 export default healthRouter;

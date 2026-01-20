@@ -12,10 +12,17 @@ import { join } from "path";
 import { AdministrativeUnit } from "./etl";
 
 // Read the normalized data
-const dataPath = join(process.cwd(), "public", "data", "gazetteer-normalized.json");
+const dataPath = join(
+  process.cwd(),
+  "public",
+  "data",
+  "gazetteer-normalized.json",
+);
 const data: AdministrativeUnit[] = JSON.parse(readFileSync(dataPath, "utf-8"));
 
-console.log(`📊 Loaded ${data.length} administrative units from gazetteer-normalized.json`);
+console.log(
+  `📊 Loaded ${data.length} administrative units from gazetteer-normalized.json`,
+);
 
 // Group data by type for statistics
 const stats = data.reduce(
@@ -43,7 +50,9 @@ for (const unit of data) {
 }
 
 if (duplicates.length > 0) {
-  console.warn(`\n⚠️  Found ${duplicates.length} duplicate codes in source data:`);
+  console.warn(
+    `\n⚠️  Found ${duplicates.length} duplicate codes in source data:`,
+  );
   duplicates.forEach((dup) => {
     console.warn(`   - ${dup.code}: ${dup.name_en} (${dup.name_km})`);
   });
@@ -62,14 +71,24 @@ const generateInsertStatements = () => {
     const name_km = unit.name_km.replace(/'/g, "''");
     const name_en = unit.name_en.replace(/'/g, "''");
     const type = unit.type.replace(/'/g, "''");
-    const type_km = unit.type_km ? `'${unit.type_km.replace(/'/g, "''")}'` : "NULL";
-    const type_en = unit.type_en ? `'${unit.type_en.replace(/'/g, "''")}'` : "NULL";
-    const parentCode = unit.parent_code ? `'${unit.parent_code.replace(/'/g, "''")}'` : "NULL";
-    const reference = unit.reference ? `'${unit.reference.replace(/'/g, "''")}'` : "NULL";
+    const type_km = unit.type_km
+      ? `'${unit.type_km.replace(/'/g, "''")}'`
+      : "NULL";
+    const type_en = unit.type_en
+      ? `'${unit.type_en.replace(/'/g, "''")}'`
+      : "NULL";
+    const parentCode = unit.parent_code
+      ? `'${unit.parent_code.replace(/'/g, "''")}'`
+      : "NULL";
+    const reference = unit.reference
+      ? `'${unit.reference.replace(/'/g, "''")}'`
+      : "NULL";
     const officialNote = unit.official_note
       ? `'${unit.official_note.replace(/'/g, "''")}'`
       : "NULL";
-    const checkerNote = unit.checker_note ? `'${unit.checker_note.replace(/'/g, "''")}'` : "NULL";
+    const checkerNote = unit.checker_note
+      ? `'${unit.checker_note.replace(/'/g, "''")}'`
+      : "NULL";
 
     const statement = `INSERT OR REPLACE INTO administrative_units (code, name_km, name_en, type, type_km, type_en, parent_code, reference, official_note, checker_note) VALUES ('${code}', '${name_km}', '${name_en}', '${type}', ${type_km}, ${type_en}, ${parentCode}, ${reference}, ${officialNote}, ${checkerNote});`;
 

@@ -36,7 +36,7 @@ export const PAGINATION_DEFAULTS = {
  */
 export function parsePaginationParams(
   pageStr?: string,
-  limitStr?: string
+  limitStr?: string,
 ): PaginationParams {
   let page = parseInt(pageStr || String(PAGINATION_DEFAULTS.PAGE), 10);
   let limit = parseInt(limitStr || String(PAGINATION_DEFAULTS.LIMIT), 10);
@@ -69,7 +69,7 @@ export function calculateOffset(page: number, limit: number): number {
 export function buildPaginationMeta(
   page: number,
   limit: number,
-  total: number
+  total: number,
 ): PaginationMeta {
   const totalPages = Math.ceil(total / limit);
 
@@ -91,7 +91,7 @@ export function createPaginatedResponse<T>(
   data: T[],
   page: number,
   limit: number,
-  total: number
+  total: number,
 ): PaginatedResponse<T> {
   return {
     data,

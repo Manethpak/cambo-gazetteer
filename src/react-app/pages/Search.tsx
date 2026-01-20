@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { SearchBar } from "../components/SearchBar";
+import { useSearchParams, Link } from "react-router-dom";
+import { SearchBarWithAutocomplete } from "../components/SearchBarWithAutocomplete";
 import { SearchResult } from "../types";
-import { Loader2, Copy, Check, Search } from "lucide-react";
+import { Loader2, Copy, Check, Search, ChevronRight } from "lucide-react";
 import { TypeLabel } from "@/components/TypeLabel";
 import { getEnglishName, getKhmerName } from "@/libs/name";
 
@@ -47,7 +47,10 @@ export function SearchPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto mb-12">
-        <SearchBar onSearch={handleSearch} initialValue={query} loading={loading} />
+        <SearchBarWithAutocomplete
+          onSearch={handleSearch}
+          initialValue={query}
+        />
       </div>
 
       <div className="max-w-3xl mx-auto">
@@ -56,7 +59,9 @@ export function SearchPage() {
             <Loader2 className="w-8 h-8 animate-spin text-brand-600" />
           </div>
         ) : error ? (
-          <div className="text-center py-12 text-red-600 bg-red-50 rounded-xl border border-red-100">{error}</div>
+          <div className="text-center py-12 text-red-600 bg-red-50 rounded-xl border border-red-100">
+            {error}
+          </div>
         ) : results.length > 0 ? (
           <div className="space-y-6">
             <div className="flex items-center justify-between px-1">
@@ -66,13 +71,14 @@ export function SearchPage() {
             </div>
             <div className="grid gap-3">
               {results.map((result) => (
-                <div
+                <Link
                   key={result.code}
-                  className="group relative flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl shadow-sm"
+                  to={`/location/${result.code}`}
+                  className="group relative flex items-center justify-between p-4 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-brand-300 hover:shadow-md transition-all"
                 >
-                  <div className="flex-1">
+                  <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1">
-                      <h4 className="text-xl font-bold font-khmer text-slate-900">
+                      <h4 className="text-xl font-bold font-khmer text-slate-900 group-hover:text-brand-700 transition-colors">
                         {getKhmerName(result)}
                       </h4>
                       <TypeLabel type={result.type} />
@@ -80,18 +86,30 @@ export function SearchPage() {
                     <h3 className="text-base text-slate-500 font-medium">
                       {getEnglishName(result)}
                     </h3>
+                    {result.path && (
+                      <p className="text-sm text-slate-400 mt-1 truncate">
+                        {result.path}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="flex items-center gap-6 pl-4">
+                  <div className="flex items-center gap-3 pl-4 shrink-0">
                     <button
                       type="button"
-                      onClick={() => handleCopy(result.code)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleCopy(result.code);
+                      }}
                       className="flex items-center gap-2 group/btn px-3 py-1.5 rounded-lg hover:bg-slate-50 transition-colors"
                       title="Copy Code"
                     >
-                      <span className={`text-lg font-mono font-semibold transition-colors ${
-                        copiedId === result.code ? "text-emerald-600" : "text-brand-600 group-hover:text-brand-700"
-                      }`}>
+                      <span
+                        className={`text-lg font-mono font-semibold transition-colors ${
+                          copiedId === result.code
+                            ? "text-emerald-600"
+                            : "text-brand-600"
+                        }`}
+                      >
                         {result.code}
                       </span>
                       {copiedId === result.code ? (
@@ -100,8 +118,9 @@ export function SearchPage() {
                         <Copy className="w-4 h-4 text-slate-300 group-hover/btn:text-brand-400 transition-colors" />
                       )}
                     </button>
+                    <ChevronRight className="w-5 h-5 text-slate-300 group-hover:text-brand-500 transition-colors" />
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           </div>
@@ -110,8 +129,12 @@ export function SearchPage() {
             <div className="inline-flex justify-center items-center w-16 h-16 rounded-full bg-slate-50 mb-4">
               <Search className="w-8 h-8 text-slate-300" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900">No results found</h3>
-            <p className="text-slate-500 mt-1">We couldn''t find anything for "{query}"</p>
+            <h3 className="text-lg font-medium text-slate-900">
+              No results found
+            </h3>
+            <p className="text-slate-500 mt-1">
+              We couldn''t find anything for "{query}"
+            </p>
           </div>
         ) : null}
       </div>

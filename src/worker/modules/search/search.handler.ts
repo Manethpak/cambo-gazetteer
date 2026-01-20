@@ -1,6 +1,10 @@
 import { calculateOffset, createPaginatedResponse } from "~/utils/pagination";
 import { AutocompleteResponse, PaginatedSearchResponse } from "~/types";
-import { fuzzySearchCount, searchWithHierarchy, autocompleteSearch } from "~/db/queries";
+import {
+  fuzzySearchCount,
+  searchWithHierarchy,
+  autocompleteSearch,
+} from "~/db/queries";
 import { type DatabaseType } from "~/db";
 
 /**

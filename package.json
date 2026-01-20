@@ -14,7 +14,8 @@
     "check": "tsc && vite build && wrangler deploy --dry-run",
     "deploy": "wrangler deploy",
     "lint": "eslint",
-    "format": "oxfmt '!**/*.{ts,tsx,js,jsx}'",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
     "preview": "npm run build && vite preview",
     "etl": "tsx scripts/etl.ts",
     "db:generate": "drizzle-kit generate",
@@ -41,6 +42,7 @@
     "lucide-react": "^0.554.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
+    "react-helmet-async": "^2.0.5",
     "react-router-dom": "^7.9.6",
     "tailwindcss": "^4.1.17",
     "zod": "^4.1.12"

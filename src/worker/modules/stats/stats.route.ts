@@ -16,7 +16,7 @@ statsRouter.get(
     const stats = await getStats(db);
 
     return c.json(stats);
-  }
+  },
 );
 
 statsRouter.get(
@@ -28,7 +28,7 @@ statsRouter.get(
     const stats = await getStatsDetail(db);
 
     return c.json(stats);
-  }
+  },
 );
 
 export default statsRouter;

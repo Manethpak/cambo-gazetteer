@@ -25,7 +25,7 @@ app.get(
         description: "Camdbodia Geo Gazetteer API",
       },
     },
-  })
+  }),
 );
 
 app.get(
@@ -33,7 +33,7 @@ app.get(
   Scalar({
     theme: "deepSpace",
     url: "/openapi.json",
-  })
+  }),
 );
 
 // Serve static files (React documentation app) for all other routes

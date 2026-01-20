@@ -1,11 +1,10 @@
-import { Link, useNavigate } from "react-router-dom";
-import { SearchBar } from "../components/SearchBar";
-import { Map, Database, Zap, Search, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { SearchBarWithAutocomplete } from "../components/SearchBarWithAutocomplete";
+import { Map as MapIcon, Database, Zap, Search, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { StatsResponse } from "../types";
 
 export function Home() {
-  const navigate = useNavigate();
   const [stats, setStats] = useState<StatsResponse | null>(null);
 
   useEffect(() => {
@@ -15,14 +14,10 @@ export function Home() {
       .catch((err) => console.error("Failed to fetch stats", err));
   }, []);
 
-  const handleSearch = (query: string) => {
-    navigate(`/search?q=${encodeURIComponent(query)}`);
-  };
-
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-[75vh] flex items-center justify-center bg-slate-950 text-white py-24 overflow-hidden">
+      <section className="relative min-h-[75vh] flex items-center justify-center bg-slate-950 text-white py-24 ">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-10 mix-blend-soft-light"></div>
         <div className="absolute inset-0 bg-linear-to-tr from-slate-950 via-slate-950/95 to-indigo-950/50"></div>
@@ -45,25 +40,27 @@ export function Home() {
               <img
                 src="/assets/logo.png"
                 alt="Cambo Gazetteer Logo"
-                className="w-24 h-24 mt-4 rounded-3xl shadow-2xl shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-500"
+                className="w-24 h-24 mt-4 rounded-3xl shadow-2xl shadow-indigo-500/20"
               />
             </div>
 
             <h1 className="text-4xl md:text-7xl font-black mb-6 tracking-tighter leading-[0.9] animate-slide-up">
-              Cambodia's <br />
+              Cambodia Postal Codes & <br />
               <span className="gradient-text premium-gradient">
-                Digital Map
+                Geolocation Data
               </span>
             </h1>
 
-            <div className="max-w-3xl mx-auto mb-10 transform hover:scale-[1.01] transition-all duration-500 shadow-2xl shadow-indigo-500/20">
-              <SearchBar onSearch={handleSearch} />
+            <div className="max-w-3xl mx-auto mb-10 shadow-2xl shadow-indigo-500/20">
+              <SearchBarWithAutocomplete />
             </div>
 
             <p className="text-base md:text-lg text-slate-300 mb-12 leading-relaxed max-w-2xl mx-auto font-medium">
-              Enabling accessibility of free and open-source data.
+              Free open-source API for Cambodia's geographic data, postal codes
+              & administrative divisions.
               <br className="hidden md:block" />
-              Providing seamless access to 16,000+ administrative units for Cambodia.
+              Access 16,457 locations including provinces, districts, communes &
+              villages with bilingual Khmer-English support.
             </p>
 
             <div className="flex flex-wrap justify-center gap-6">
@@ -76,6 +73,7 @@ export function Home() {
               <a
                 href="/api/docs"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="px-8 py-3.5 bg-white/5 text-white rounded-2xl font-bold border border-white/10 hover:bg-white/10 transition-all active:scale-95 backdrop-blur-sm"
               >
                 Developer API
@@ -93,7 +91,7 @@ export function Home() {
               label="Provinces"
               value={stats?.byType.provinces}
               loading={!stats}
-              icon={<Map className="w-5 h-5 text-indigo-500" />}
+              icon={<MapIcon className="w-5 h-5 text-indigo-500" />}
             />
             <QuickStat
               label="Capital"
@@ -143,7 +141,6 @@ export function Home() {
                 boundaries so you don't have to.
               </p>
             </div>
-
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">

@@ -3,7 +3,10 @@ import { join } from "path";
 import Database from "better-sqlite3";
 
 function findLocalD1Path(): string | null {
-  const base = join(process.cwd(), ".wrangler/state/v3/d1/miniflare-D1DatabaseObject");
+  const base = join(
+    process.cwd(),
+    ".wrangler/state/v3/d1/miniflare-D1DatabaseObject",
+  );
   try {
     const files = readdirSync(base);
     const db = files.find((f) => f.endsWith(".sqlite"));
@@ -24,7 +27,10 @@ function findLocalD1Path(): string | null {
   }
 
   // Read seed SQL file
-  const seedSQL = readFileSync(join(process.cwd(), "public", "data", "seed.sql"), "utf-8");
+  const seedSQL = readFileSync(
+    join(process.cwd(), "public", "data", "seed.sql"),
+    "utf-8",
+  );
   // Split into statements by semicolon at end of line. Keep semicolons.
   const statements = seedSQL
     .split(/;\s*\n/) // split on ; newline combos

@@ -33,6 +33,7 @@ export type ResponseByCode = AdministrativeUnit & {
   childrenCount: { count: number; type: Type }[];
   siblings: AdministrativeUnit[];
   breadcrumb: BreadCrumb[];
+  path_km?: string;
 };
 
 export interface SearchResult {

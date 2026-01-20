@@ -1,5 +1,16 @@
 import { useState } from "react";
-import { ChevronRight, ChevronDown, Folder, FolderOpen, MapPin, Loader2, Building2, Home } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  ChevronRight,
+  ChevronDown,
+  Folder,
+  FolderOpen,
+  MapPin,
+  Loader2,
+  Building2,
+  Home,
+  ExternalLink,
+} from "lucide-react";
 import { AdministrativeUnit, ResponseByCode, Type } from "@/types";
 import { getEnglishName, getKhmerName } from "@/libs/name";
 
@@ -11,8 +22,17 @@ export function DirectoryTree({ items }: DirectoryTreeProps) {
   return (
     <div className="border border-slate-200 rounded-2xl bg-white overflow-hidden shadow-sm">
       <div className="bg-slate-50/80 backdrop-blur-sm px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest px-8">Administrative Unit / ទីតាំងរដ្ឋបាល</span>
-        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-32 text-center">Code / លេខកូដ</span>
+        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest px-8">
+          Administrative Unit / ទីតាំងរដ្ឋបាល
+        </span>
+        <div className="flex items-center gap-8">
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-32 text-center">
+            Code / លេខកូដ
+          </span>
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-widest w-32 text-center">
+            Postal / លេខកូដប្រៃសណីយ៍
+          </span>
+        </div>
       </div>
       <div className="divide-y divide-slate-100">
         {items.map((item) => (
@@ -36,7 +56,13 @@ function DirectoryItem({ unit, level }: DirectoryItemProps) {
 
   // Determine if this unit can have children (Villages are leaf nodes)
   const isLeaf = unit.type === Type.VILLAGE;
-  
+
+  // Generate postal code from administrative code
+  const getPostalCode = (code: string): string => {
+    if (code.length > 6) return "N/A";
+    return code.padEnd(6, "0");
+  };
+
   const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -56,7 +82,9 @@ function DirectoryItem({ unit, level }: DirectoryItemProps) {
         const res = await fetch(`/api/v1/code/${unit.code}`);
         const data: ResponseByCode = await res.json();
         if (data.children) {
-          const sortedChildren = data.children.sort((a, b) => Number(a.code) - Number(b.code));
+          const sortedChildren = data.children.sort(
+            (a, b) => Number(a.code) - Number(b.code),
+          );
           setChildren(sortedChildren);
         }
         setHasLoaded(true);
@@ -72,20 +100,22 @@ function DirectoryItem({ unit, level }: DirectoryItemProps) {
 
   return (
     <div className="bg-white">
-      <div 
+      <Link
+        to={`/location/${unit.code}`}
         className={`
-          relative flex items-center justify-between py-4 pr-6 hover:bg-slate-50 transition-all cursor-pointer group
+          relative flex items-center justify-between py-4 pr-6 hover:bg-slate-50 transition-all group
           ${isOpen ? "bg-brand-50/30" : ""}
           ${level === 0 ? "border-l-4 border-l-transparent hover:border-l-brand-500" : ""}
         `}
         style={{ paddingLeft: `${padLeft}px` }}
-        onClick={handleToggle}
       >
         <div className="flex items-center gap-4">
           {/* Toggle Icon or Spacer */}
           {!isLeaf ? (
-            <div 
-              className={`p-1 rounded-lg transition-colors ${isOpen ? 'bg-brand-100/50 text-brand-600' : 'text-slate-400 group-hover:bg-slate-200/50'}`}
+            <button
+              type="button"
+              onClick={handleToggle}
+              className={`p-1 rounded-lg transition-colors ${isOpen ? "bg-brand-100/50 text-brand-600" : "text-slate-400 group-hover:bg-slate-200/50"}`}
             >
               {loading ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -94,51 +124,69 @@ function DirectoryItem({ unit, level }: DirectoryItemProps) {
               ) : (
                 <ChevronRight className="w-4 h-4" />
               )}
-            </div>
+            </button>
           ) : (
-             <div className="w-6 flex justify-center">
-               <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-brand-400" />
-             </div>
+            <div className="w-6 flex justify-center">
+              <div className="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-brand-400" />
+            </div>
           )}
 
           {/* Unit Icon */}
-          <div className={`${isOpen ? "text-brand-600" : "text-slate-400 group-hover:text-brand-500"}`}>
-             {getUnitIcon(unit.type, isOpen)}
+          <div
+            className={`${isOpen ? "text-brand-600" : "text-slate-400 group-hover:text-brand-500"}`}
+          >
+            {getUnitIcon(unit.type, isOpen)}
           </div>
 
           <div className="flex flex-col gap-0.5">
-            <span className={`font-khmer text-base leading-tight ${isOpen ? "text-brand-700 font-bold" : "text-slate-900 font-semibold"}`}>
+            <span
+              className={`font-khmer text-base leading-tight ${isOpen ? "text-brand-700 font-bold" : "text-slate-900 font-semibold group-hover:text-brand-700"}`}
+            >
               {getKhmerName(unit)}
             </span>
-            <span className="text-sm text-slate-500 font-medium tracking-tight">
+            <span className="text-sm text-slate-500 font-medium tracking-tight group-hover:text-brand-600">
               {getEnglishName(unit)}
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <span className={`
+        <div className="flex items-center gap-4">
+          <span
+            className={`
             font-mono text-sm font-bold tracking-wider px-4 py-1.5 rounded-xl transition-all w-32 text-center
             ${isOpen ? "bg-brand-600 text-white shadow-lg shadow-brand-500/20" : "bg-slate-100 text-slate-500 group-hover:bg-slate-200 group-hover:text-slate-700"}
-          `}>
+          `}
+          >
             {unit.code}
           </span>
+          <span
+            className={`
+            font-mono text-sm font-bold tracking-wider px-4 py-1.5 rounded-xl transition-all w-32 text-center
+            ${isOpen ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/20" : "bg-slate-100 text-slate-500 group-hover:bg-emerald-50 group-hover:text-emerald-700"}
+          `}
+          >
+            {getPostalCode(unit.code)}
+          </span>
+          <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-brand-500 transition-colors" />
         </div>
-      </div>
+      </Link>
 
       {/* Children */}
       {isOpen && (
         <div className="animate-in slide-in-from-top-1 duration-200">
-           {children.length > 0 ? (
-             children.map(child => (
-               <DirectoryItem key={child.code} unit={child} level={level + 1} />
-             ))
-           ) : loading ? null : (
-             <div className="py-4 text-sm text-slate-400 italic flex items-center gap-2" style={{ paddingLeft: `${padLeft + 48}px` }}>
-               <div className="w-4 h-px bg-slate-200" />
-               No items found
-             </div>
-           )}
+          {children.length > 0 ? (
+            children.map((child) => (
+              <DirectoryItem key={child.code} unit={child} level={level + 1} />
+            ))
+          ) : loading ? null : (
+            <div
+              className="py-4 text-sm text-slate-400 italic flex items-center gap-2"
+              style={{ paddingLeft: `${padLeft + 48}px` }}
+            >
+              <div className="w-4 h-px bg-slate-200" />
+              No items found
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -149,7 +197,11 @@ function getUnitIcon(type: string, isOpen: boolean) {
   switch (type) {
     case Type.PROVINCE:
     case Type.MUNICIPALTY:
-      return isOpen ? <FolderOpen className="w-5 h-5" /> : <Folder className="w-5 h-5" />;
+      return isOpen ? (
+        <FolderOpen className="w-5 h-5" />
+      ) : (
+        <Folder className="w-5 h-5" />
+      );
     case Type.DISTRICT:
       return <Building2 className="w-4 h-4" />;
     case Type.COMMUNE:

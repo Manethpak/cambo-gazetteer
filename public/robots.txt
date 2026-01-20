@@ -1,0 +1,18 @@
+# robots.txt for Cambodia Gazetteer
+# Allow all search engines to crawl the site
+
+User-agent: *
+Allow: /
+Allow: /explore
+Allow: /datasource
+Allow: /search
+Allow: /api/docs
+
+# Disallow API endpoints from being indexed (crawlers should use the documentation instead)
+Disallow: /api/v1/
+
+# Allow crawling of static assets
+Allow: /assets/
+
+# Sitemap location
+Sitemap: https://cambo-gazetteer.manethpak.dev/sitemap.xml

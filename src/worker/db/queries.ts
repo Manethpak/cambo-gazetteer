@@ -79,13 +79,16 @@ export async function getChildrenCount(db: DatabaseType, code: string) {
  * Includes ancestors, descendants, siblings, and the current unit
  */
 export async function getFullHierarchy(db: DatabaseType, code: string) {
-  const [ancestors, descendants, siblings, current, childrenCount] = await Promise.all([
-    getAncestors(db, code),
-    getDescendants(db, code),
-    getSiblings(db, code),
-    db.all<AdministrativeUnit>(sql`SELECT * FROM administrative_units WHERE code = ${code}`),
-    getChildrenCount(db, code),
-  ]);
+  const [ancestors, descendants, siblings, current, childrenCount] =
+    await Promise.all([
+      getAncestors(db, code),
+      getDescendants(db, code),
+      getSiblings(db, code),
+      db.all<AdministrativeUnit>(
+        sql`SELECT * FROM administrative_units WHERE code = ${code}`,
+      ),
+      getChildrenCount(db, code),
+    ]);
 
   return {
     current: current?.[0],
@@ -100,7 +103,10 @@ export async function getFullHierarchy(db: DatabaseType, code: string) {
  * Build breadcrumb trail from ancestors and current unit
  * Returns array from root to current
  */
-export function buildBreadcrumb(ancestors: AdministrativeUnit[], current: AdministrativeUnit) {
+export function buildBreadcrumb(
+  ancestors: AdministrativeUnit[],
+  current: AdministrativeUnit,
+) {
   if (!current) return [];
 
   return [
@@ -184,7 +190,10 @@ export async function fuzzySearch(
 /**
  * Get total count for fuzzy search
  */
-export async function fuzzySearchCount(db: DatabaseType, query: string): Promise<number> {
+export async function fuzzySearchCount(
+  db: DatabaseType,
+  query: string,
+): Promise<number> {
   try {
     // Sanitize query for FTS5 by escaping single quotes
     const sanitizedQuery = query.replace(/'/g, "''");
@@ -266,7 +275,12 @@ export async function autocompleteSearch(
  * Search with full hierarchy context
  * Returns search results enriched with breadcrumb trails
  */
-export async function searchWithHierarchy(db: DatabaseType, query: string, limit = 20, offset = 0) {
+export async function searchWithHierarchy(
+  db: DatabaseType,
+  query: string,
+  limit = 20,
+  offset = 0,
+) {
   const searchResults = await fuzzySearch(db, query, limit, offset);
 
   const enriched = await Promise.all(

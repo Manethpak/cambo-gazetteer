@@ -116,12 +116,12 @@ const typeNameMapping: Record<string, string> = {
  */
 function normalizedAdminCode(code: string): string {
   const trimmedCode = code.trim();
-  
+
   // Check if length is odd
   if (trimmedCode.length % 2 === 1) {
-    return '0' + trimmedCode;
+    return "0" + trimmedCode;
   }
-  
+
   return trimmedCode;
 }
 
@@ -133,24 +133,27 @@ function normalizedAdminCode(code: string): string {
  */
 function normalizePostalCode(code: string): string | null {
   const trimmedCode = normalizedAdminCode(code.trim());
-  
+
   // Ignore codes longer than 6 digits
   if (trimmedCode.length > 6) {
     return null;
   }
-  
+
   // Pad codes less than 6 digits with '0' suffix
   if (trimmedCode.length < 6) {
-    return trimmedCode.padEnd(6, '0');
+    return trimmedCode.padEnd(6, "0");
   }
-  
+
   return trimmedCode;
 }
 
 /**
  * Determine administrative type based on code length and context
  */
-function determineType(code: string, typeKhmer: string): "district" | "commune" | "village" {
+function determineType(
+  code: string,
+  typeKhmer: string,
+): "district" | "commune" | "village" {
   // Use Khmer type mapping first
   if (typeMapping[typeKhmer]) {
     return typeMapping[typeKhmer];
@@ -176,7 +179,9 @@ function extractData(filePath: string): AdministrativeUnit[] {
   // Build province mapping from provinces.json
   const provinceMapping = buildProvinceMapping();
 
-  console.log(`📊 Found ${workbook.SheetNames.length} sheets (provinces/municipalities)`);
+  console.log(
+    `📊 Found ${workbook.SheetNames.length} sheets (provinces/municipalities)`,
+  );
 
   // Add provinces first
   for (const sheetName of workbook.SheetNames) {
@@ -188,7 +193,8 @@ function extractData(filePath: string): AdministrativeUnit[] {
         name_en: provinceInfo.name_en,
         type: provinceInfo.type,
         type_km: provinceInfo.type === "municipality" ? "រាជធានី" : "ខេត្ត",
-        type_en: provinceInfo.type === "municipality" ? "Municipality" : "Province",
+        type_en:
+          provinceInfo.type === "municipality" ? "Municipality" : "Province",
       });
     }
   }
@@ -219,14 +225,14 @@ function extractData(filePath: string): AdministrativeUnit[] {
       // Skip empty rows
       if (!row.Code || !row["Name (Latin)"]) continue;
 
-      const code = (String(row.Code));
+      const code = String(row.Code);
       const typeKhmer = String(row.Type || "").trim();
       const type = determineType(code, typeKhmer);
 
       // Determine parent code based on type and context
       let parentCode: string | undefined;
       if (type === "district") {
-        parentCode = (provinceInfo.code);
+        parentCode = provinceInfo.code;
         currentDistrict = code;
         currentCommune = null;
       } else if (type === "commune") {
@@ -248,8 +254,10 @@ function extractData(filePath: string): AdministrativeUnit[] {
 
       // Add optional fields if they exist
       if (row.Reference) unit.reference = String(row.Reference).trim();
-      if (row["Official Note"]) unit.official_note = String(row["Official Note"]).trim();
-      if (row["Note (by Checker)"]) unit.checker_note = String(row["Note (by Checker)"]).trim();
+      if (row["Official Note"])
+        unit.official_note = String(row["Official Note"]).trim();
+      if (row["Note (by Checker)"])
+        unit.checker_note = String(row["Note (by Checker)"]).trim();
 
       allUnits.push(unit);
     }
@@ -281,7 +289,7 @@ function main() {
 
   // 2. Postal code normalized format
   const postalUnits: PostalUnit[] = [];
-  
+
   for (const unit of units) {
     const postalCode = normalizePostalCode(unit.code);
     if (postalCode) {
@@ -304,7 +312,9 @@ function main() {
 
   const stats = {
     total_units: units.length,
-    provinces: units.filter((u) => u.type === "province" || u.type === "municipality").length,
+    provinces: units.filter(
+      (u) => u.type === "province" || u.type === "municipality",
+    ).length,
     districts: units.filter((u) => u.type === "district").length,
     communes: units.filter((u) => u.type === "commune").length,
     villages: units.filter((u) => u.type === "village").length,

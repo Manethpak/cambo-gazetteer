@@ -110,12 +110,17 @@ notes: "near temple"`}
               <label className="block text-xs font-semibold text-slate-600 mb-2">
                 Location
               </label>
-              <select disabled className="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded text-slate-700">
+              <select
+                disabled
+                className="w-full px-3 py-2 bg-slate-100 border border-slate-300 rounded text-slate-700"
+              >
                 <option>Select location...</option>
                 <option>Siem Reap, Krong - 02</option>
                 <option>Siem Reap, Siem Reap District - 0202</option>
                 <option>Siem Reap, Svay Leu Commune - 020205</option>
-                <option selected>Siem Reap, Svay Leu, Sangkat Svay Leu - 02020501</option>
+                <option selected>
+                  Siem Reap, Svay Leu, Sangkat Svay Leu - 02020501
+                </option>
               </select>
             </div>
           </div>

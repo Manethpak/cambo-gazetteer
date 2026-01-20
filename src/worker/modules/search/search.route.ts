@@ -32,12 +32,12 @@ searchRouter.get(
     const db = dbClient(c.env);
     const { page, limit } = parsePaginationParams(
       c.req.query("page"),
-      c.req.query("limit")
+      c.req.query("limit"),
     );
     const result = await search(db, query, page, limit);
 
     return c.json(result);
-  }
+  },
 );
 
 /**
@@ -58,7 +58,7 @@ searchRouter.get(
     const result = await autocomplete(db, query, 10);
 
     return c.json(result);
-  }
+  },
 );
 
 export default searchRouter;

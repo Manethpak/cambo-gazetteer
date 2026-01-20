@@ -9,12 +9,12 @@ interface SearchBarProps {
   className?: string;
 }
 
-export function SearchBar({ 
-  onSearch, 
-  loading = false, 
-  initialValue = "", 
+export function SearchBar({
+  onSearch,
+  loading = false,
+  initialValue = "",
   placeholder = "Search for a location...",
-  className = ""
+  className = "",
 }: SearchBarProps) {
   const [query, setQuery] = useState(initialValue);
 
