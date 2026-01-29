@@ -61,7 +61,7 @@ export function Header() {
               to="/datasource"
               className="text-sm font-semibold text-slate-600 hover:text-indigo-600 transition-colors"
             >
-              Data Source
+              Source
             </Link>
           </nav>
         </div>
@@ -137,7 +137,7 @@ export function Header() {
               onClick={handleLinkClick}
               className="px-4 py-3 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
             >
-              Data Source
+              Source
             </Link>
             <Link
               to="/api/docs"

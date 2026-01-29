@@ -88,7 +88,7 @@ Each code lookup returns full details: Khmer name, English name, type, parent hi
 
 ## Data Sources
 
-Sourced from [Open Development Cambodia](https://data.opendevelopmentcambodia.net/dataset/cambodia-gazetteer) and validated against [NCDD Gazetteer](https://db.ncdd.gov.kh/gazetteer). Processed, normalized, and made accessible via API and downloadable datasets.
+Sourced from [Open Development Cambodia](https://data.opendevelopmentcambodia.net/dataset/cambodia-gazetteer) and [UNOCHA via HDX](https://data.humdata.org/dataset/cod-ab-khm). Validated against [NCDD Gazetteer](https://db.ncdd.gov.kh/gazetteer). Processed, normalized, and made accessible via API and downloadable datasets.
 
 **Data License:** [ODbL](https://opendatacommons.org/licenses/odbl/) - Free to use with attribution.
 
@@ -111,7 +111,7 @@ Report issues: [github.com/Manethpak/cambo-gazetteer/issues](https://github.com/
 **Code:** MIT License  
 **Data:** ODbL (Open Database License)
 
-Attribution required when using the data. Credit both [Open Development Cambodia](https://opendevelopmentcambodia.net/) and this project.
+Attribution required when using the data. Credit [Open Development Cambodia](https://opendevelopmentcambodia.net/), [UNOCHA/HDX](https://data.humdata.org/), and this project.
 
 ---
 
