@@ -103,5 +103,10 @@
   "files": [
     "README.md",
     "LICENSE"
-  ]
+  ],
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3"
+    ]
+  }
 }
