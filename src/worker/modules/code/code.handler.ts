@@ -16,8 +16,8 @@ export async function getLocationByCode(db: DatabaseType, code: string) {
   return {
     ...hierarchy.current,
     breadcrumb,
-    path: breadcrumb.map((b) => b.name_en).join(", "),
-    path_km: breadcrumb.map((b) => b.name_km).join(", "),
+    path: [...breadcrumb].reverse().map((b) => b.name_en).join(" "),
+    path_km: [...breadcrumb].reverse().map((b) => b.name_km).join(" "),
     ancestors: hierarchy.ancestors,
     children: hierarchy.descendants,
     siblings: hierarchy.siblings,

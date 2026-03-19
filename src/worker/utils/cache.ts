@@ -1,7 +1,11 @@
 import { cache } from "hono/cache";
 
-export const addCache = (name: string, time: "1hr" | "4hr" | "12hr") => {
+export const addCache = (
+  name: string,
+  time: "5min" | "1hr" | "4hr" | "12hr",
+) => {
   const cacheControlMap: Record<string, string> = {
+    "5min": "public, max-age=300, stale-while-revalidate=60",
     "1hr": "public, max-age=3600, stale-while-revalidate=900",
     "4hr": "public, max-age=14400, stale-while-revalidate=3600",
     "12hr": "public, max-age=43200, stale-while-revalidate=10800",

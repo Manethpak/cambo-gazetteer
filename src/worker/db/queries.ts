@@ -291,8 +291,8 @@ export async function searchWithHierarchy(
       return {
         ...result,
         breadcrumb,
-        path: breadcrumb.map((b) => b.name_en).join(", "),
-        pathKm: breadcrumb.map((b) => b.name_km).join(", "),
+        path: [...breadcrumb].reverse().map((b) => b.name_en).join(" "),
+        pathKm: [...breadcrumb].reverse().map((b) => b.name_km).join(" "),
       };
     }),
   );

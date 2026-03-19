@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { SearchBarWithAutocomplete } from "../components/SearchBarWithAutocomplete";
 import { MapLibreMap } from "../components/MapLibreMap";
+import { LocationInfo } from "../components/LocationInfo";
 import { Database, Search, Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { StatsResponse } from "../types";
@@ -64,12 +65,15 @@ export function Home() {
             {/* Right Column: Hero Map */}
             <div className="relative group col-span-3 animate-slide-up">
               <div className="absolute -inset-1 bg-linear-to-r from-indigo-500 to-purple-600 rounded-[3rem] blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-              <div className="relative bg-slate-900 rounded-lg border border-white/10 overflow-hidden shadow-2xl">
+              <div className="relative bg-slate-900 rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
                 <MapLibreMap
                   height="550px"
                   zoom={6}
                   enableGeolocation={true}
                 />
+                <div className="absolute bottom-4 left-4 z-10 w-full max-w-xs sm:max-w-sm">
+                  <LocationInfo />
+                </div>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import codeRouter from "./modules/code/code.route";
 import searchRouter from "./modules/search/search.route";
 import administrativeRouter from "./modules/administrative/administrative.route";
 import statsRouter from "./modules/stats/stats.route";
+import lookupRouter from "./modules/lookup/lookup.route";
 import { openAPIRouteHandler } from "hono-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 
@@ -13,6 +14,7 @@ app.route("/api", healthRouter);
 app.route("/api", statsRouter);
 app.route("/api", administrativeRouter);
 app.route("/api", codeRouter);
+app.route("/api", lookupRouter);
 app.route("/api", searchRouter);
 
 app.get(

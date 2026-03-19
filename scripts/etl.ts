@@ -111,18 +111,17 @@ const typeNameMapping: Record<string, string> = {
 };
 
 /**
- * Normalize postal code to ensure it has even length
- * Prefix with '0' if the code length is odd
+ * Normalize hierarchical admin codes so every level stays in 2-digit chunks.
+ * Excel may coerce values like 0101 into 101, so odd-length codes are left-padded.
  */
-function normalizedAdminCode(code: string): string {
-  const trimmedCode = code.trim();
+function normalizeEvenDigitCode(code: string): string {
+  const digitsOnly = code.replace(/\D/g, "").trim();
 
-  // Check if length is odd
-  if (trimmedCode.length % 2 === 1) {
-    return "0" + trimmedCode;
+  if (digitsOnly.length === 0) {
+    return "";
   }
 
-  return trimmedCode;
+  return digitsOnly.length % 2 === 1 ? `0${digitsOnly}` : digitsOnly;
 }
 
 /**
@@ -132,7 +131,7 @@ function normalizedAdminCode(code: string): string {
  * - Codes with less than 6 digits are padded with '0' suffix
  */
 function normalizePostalCode(code: string): string | null {
-  const trimmedCode = normalizedAdminCode(code.trim());
+  const trimmedCode = normalizeEvenDigitCode(code);
 
   // Ignore codes longer than 6 digits
   if (trimmedCode.length > 6) {
@@ -160,12 +159,33 @@ function determineType(
   }
 
   // Fallback to code length analysis
-  const codeLength = code.length;
-  if (codeLength === 3 || codeLength === 4) return "district";
-  if (codeLength === 5) return "commune";
-  if (codeLength >= 6) return "village";
+  const codeLength = normalizeEvenDigitCode(code).length;
+  if (codeLength === 4) return "district";
+  if (codeLength === 6) return "commune";
+  if (codeLength >= 8) return "village";
 
   return "village"; // default
+}
+
+function validateEvenDigitCodes(units: AdministrativeUnit[]): void {
+  const invalidUnits = units.filter((unit) => {
+    const hasInvalidCode = unit.code.length % 2 !== 0;
+    const hasInvalidParent =
+      unit.parent_code !== undefined && unit.parent_code.length % 2 !== 0;
+
+    return hasInvalidCode || hasInvalidParent;
+  });
+
+  if (invalidUnits.length > 0) {
+    const examples = invalidUnits
+      .slice(0, 5)
+      .map((unit) => `${unit.code} -> ${unit.parent_code ?? "<root>"}`)
+      .join(", ");
+
+    throw new Error(
+      `Found administrative codes with odd digit counts: ${examples}`,
+    );
+  }
 }
 
 /**
@@ -188,7 +208,7 @@ function extractData(filePath: string): AdministrativeUnit[] {
     const provinceInfo = provinceMapping[sheetName];
     if (provinceInfo) {
       allUnits.push({
-        code: normalizedAdminCode(provinceInfo.code),
+        code: normalizeEvenDigitCode(provinceInfo.code),
         name_km: provinceInfo.name_km,
         name_en: provinceInfo.name_en,
         type: provinceInfo.type,
@@ -215,6 +235,7 @@ function extractData(filePath: string): AdministrativeUnit[] {
     const rawData = XLSX.utils.sheet_to_json<RawRow>(sheet, {
       range: 2, // Skip title and empty row, start from header
       defval: "",
+      raw: false,
     });
 
     // Track current district and commune for context
@@ -225,14 +246,14 @@ function extractData(filePath: string): AdministrativeUnit[] {
       // Skip empty rows
       if (!row.Code || !row["Name (Latin)"]) continue;
 
-      const code = String(row.Code);
+      const code = normalizeEvenDigitCode(String(row.Code));
       const typeKhmer = String(row.Type || "").trim();
       const type = determineType(code, typeKhmer);
 
       // Determine parent code based on type and context
       let parentCode: string | undefined;
       if (type === "district") {
-        parentCode = provinceInfo.code;
+        parentCode = normalizeEvenDigitCode(provinceInfo.code);
         currentDistrict = code;
         currentCommune = null;
       } else if (type === "commune") {
@@ -262,6 +283,8 @@ function extractData(filePath: string): AdministrativeUnit[] {
       allUnits.push(unit);
     }
   }
+
+  validateEvenDigitCodes(allUnits);
 
   console.log(`✅ Extracted ${allUnits.length} administrative units`);
   return allUnits;
