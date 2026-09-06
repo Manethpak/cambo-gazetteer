@@ -4,7 +4,6 @@ import { sValidator } from "@hono/standard-validator";
 import { lookupByCoordinate } from "./lookup.handler";
 import { dbClient } from "~/db";
 import { addCache } from "~/utils/cache";
-import { rateLimit } from "~/utils/rate-limit";
 import { getLookupDoc, lookupQuerySchema } from "./lookup.schema";
 
 const lookupRouter = new Hono<{ Bindings: Env }>();
@@ -15,7 +14,6 @@ const lookupRouter = new Hono<{ Bindings: Env }>();
 lookupRouter.get(
   "/v1/lookup",
   addCache("lookup", "5min"),
-  rateLimit({ windowMs: 60_000, maxRequests: 20 }),
   describeRoute(getLookupDoc),
   sValidator("query", lookupQuerySchema),
   async (c) => {

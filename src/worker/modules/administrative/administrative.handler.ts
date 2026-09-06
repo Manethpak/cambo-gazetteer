@@ -34,185 +34,85 @@ export async function getProvinces(
   };
 }
 
-/**
- * Get districts by province code (or all districts if no province specified)
- */
+/** Reuse totals across pages. Dataset refreshes must purge/bump this cache. */
+export async function getUnitCount(
+  db: Database,
+  type: "district" | "commune" | "village",
+  parentCode?: string,
+): Promise<number> {
+  const key = new URL(`https://cambo-gazetteer.internal/counts/${type}`);
+  if (parentCode) key.searchParams.set("parent", parentCode);
+  let countCache: Cache | undefined;
+  try {
+    if (typeof caches !== "undefined") {
+      countCache = await caches.open("administrative-counts-v1");
+      const cached = await countCache.match(key.toString());
+      if (cached) return await cached.json<number>();
+    }
+  } catch (error) {
+    console.error("Count cache read failed", error);
+  }
+
+  const [result] = await db.select({ count: count() })
+    .from(administrativeUnits)
+    .where(and(
+      eq(administrativeUnits.type, type),
+      parentCode ? eq(administrativeUnits.parentCode, parentCode) : undefined,
+    ));
+  if (countCache) {
+    try {
+      await countCache.put(key.toString(), Response.json(result.count, {
+        headers: { "Cache-Control": "public, max-age=14400" },
+      }));
+    } catch (error) {
+      console.error("Count cache write failed", error);
+    }
+  }
+  return result.count;
+}
+
+async function getUnits(
+  db: Database,
+  type: "district" | "commune" | "village",
+  page: number,
+  limit: number,
+  parentCode?: string,
+): Promise<PaginatedResponse<AdministrativeUnit>> {
+  const total = await getUnitCount(db, type, parentCode);
+  const offset = calculateOffset(page, limit);
+  // Avoid scanning the index for pages known to be outside the result set.
+  const data = offset >= total ? [] : await db.select()
+    .from(administrativeUnits)
+    .where(and(
+      eq(administrativeUnits.type, type),
+      parentCode ? eq(administrativeUnits.parentCode, parentCode) : undefined,
+    ))
+    .orderBy(administrativeUnits.code)
+    .limit(limit)
+    .offset(offset);
+  return createPaginatedResponse(data, page, limit, total);
+}
+
+/** Get districts, optionally scoped to a province. */
 export async function getDistricts(
-  db: Database,
-  page: number,
-  limit: number,
-  provinceCode?: string,
+  db: Database, page: number, limit: number, provinceCode?: string,
 ): Promise<PaginatedResponse<AdministrativeUnit> & { provinceCode?: string }> {
-  const offset = calculateOffset(page, limit);
-
-  if (provinceCode) {
-    // Get total count
-    const [totalResult] = await db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(
-        and(
-          eq(administrativeUnits.type, "district"),
-          eq(administrativeUnits.parentCode, provinceCode),
-        ),
-      );
-
-    // Get paginated data
-    const districts = await db
-      .select()
-      .from(administrativeUnits)
-      .where(
-        and(
-          eq(administrativeUnits.type, "district"),
-          eq(administrativeUnits.parentCode, provinceCode),
-        ),
-      )
-      .orderBy(administrativeUnits.code)
-      .limit(limit)
-      .offset(offset);
-
-    return {
-      provinceCode,
-      ...createPaginatedResponse(districts, page, limit, totalResult.count),
-    };
-  }
-
-  // Get total count for all districts
-  const [totalResult] = await db
-    .select({ count: count() })
-    .from(administrativeUnits)
-    .where(eq(administrativeUnits.type, "district"));
-
-  // Get paginated data
-  const allDistricts = await db
-    .select()
-    .from(administrativeUnits)
-    .where(eq(administrativeUnits.type, "district"))
-    .orderBy(administrativeUnits.code)
-    .limit(limit)
-    .offset(offset);
-
-  return createPaginatedResponse(allDistricts, page, limit, totalResult.count);
+  const result = await getUnits(db, "district", page, limit, provinceCode);
+  return provinceCode ? { provinceCode, ...result } : result;
 }
 
-/**
- * Get communes by district code (or all communes if no district specified)
- */
+/** Get communes, optionally scoped to a district. */
 export async function getCommunes(
-  db: Database,
-  page: number,
-  limit: number,
-  districtCode?: string,
+  db: Database, page: number, limit: number, districtCode?: string,
 ): Promise<PaginatedResponse<AdministrativeUnit> & { districtCode?: string }> {
-  const offset = calculateOffset(page, limit);
-
-  if (districtCode) {
-    // Get total count
-    const [totalResult] = await db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(
-        and(
-          eq(administrativeUnits.type, "commune"),
-          eq(administrativeUnits.parentCode, districtCode),
-        ),
-      );
-
-    // Get paginated data
-    const communes = await db
-      .select()
-      .from(administrativeUnits)
-      .where(
-        and(
-          eq(administrativeUnits.type, "commune"),
-          eq(administrativeUnits.parentCode, districtCode),
-        ),
-      )
-      .orderBy(administrativeUnits.code)
-      .limit(limit)
-      .offset(offset);
-
-    return {
-      districtCode,
-      ...createPaginatedResponse(communes, page, limit, totalResult.count),
-    };
-  }
-
-  // Get total count for all communes
-  const [totalResult] = await db
-    .select({ count: count() })
-    .from(administrativeUnits)
-    .where(eq(administrativeUnits.type, "commune"));
-
-  // Get paginated data
-  const allCommunes = await db
-    .select()
-    .from(administrativeUnits)
-    .where(eq(administrativeUnits.type, "commune"))
-    .orderBy(administrativeUnits.code)
-    .limit(limit)
-    .offset(offset);
-
-  return createPaginatedResponse(allCommunes, page, limit, totalResult.count);
+  const result = await getUnits(db, "commune", page, limit, districtCode);
+  return districtCode ? { districtCode, ...result } : result;
 }
 
-/**
- * Get villages by commune code (or all villages if no commune specified)
- */
+/** Get villages, optionally scoped to a commune. */
 export async function getVillages(
-  db: Database,
-  page: number,
-  limit: number,
-  communeCode?: string,
+  db: Database, page: number, limit: number, communeCode?: string,
 ): Promise<PaginatedResponse<AdministrativeUnit> & { communeCode?: string }> {
-  const offset = calculateOffset(page, limit);
-
-  if (communeCode) {
-    // Get total count
-    const [totalResult] = await db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(
-        and(
-          eq(administrativeUnits.type, "village"),
-          eq(administrativeUnits.parentCode, communeCode),
-        ),
-      );
-
-    // Get paginated data
-    const villages = await db
-      .select()
-      .from(administrativeUnits)
-      .where(
-        and(
-          eq(administrativeUnits.type, "village"),
-          eq(administrativeUnits.parentCode, communeCode),
-        ),
-      )
-      .orderBy(administrativeUnits.code)
-      .limit(limit)
-      .offset(offset);
-
-    return {
-      communeCode,
-      ...createPaginatedResponse(villages, page, limit, totalResult.count),
-    };
-  }
-
-  // Get total count for all villages
-  const [totalResult] = await db
-    .select({ count: count() })
-    .from(administrativeUnits)
-    .where(eq(administrativeUnits.type, "village"));
-
-  // Get paginated data
-  const allVillages = await db
-    .select()
-    .from(administrativeUnits)
-    .where(eq(administrativeUnits.type, "village"))
-    .orderBy(administrativeUnits.code)
-    .limit(limit)
-    .offset(offset);
-
-  return createPaginatedResponse(allVillages, page, limit, totalResult.count);
+  const result = await getUnits(db, "village", page, limit, communeCode);
+  return communeCode ? { communeCode, ...result } : result;
 }

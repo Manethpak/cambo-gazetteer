@@ -23,5 +23,31 @@
       "database_id": "8c8b2b8c-f313-408c-8a7e-67cca1fd7683",
       "migrations_dir": "drizzle"
     }
+  ],
+  "ratelimits": [
+    {
+      "name": "API_RATE_LIMITER",
+      "namespace_id": "839201",
+      "simple": {
+        "limit": 120,
+        "period": 60
+      }
+    },
+    {
+      "name": "SEARCH_RATE_LIMITER",
+      "namespace_id": "839202",
+      "simple": {
+        "limit": 30,
+        "period": 60
+      }
+    },
+    {
+      "name": "LOOKUP_RATE_LIMITER",
+      "namespace_id": "839203",
+      "simple": {
+        "limit": 20,
+        "period": 60
+      }
+    }
   ]
 }

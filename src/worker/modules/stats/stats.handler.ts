@@ -1,4 +1,4 @@
-import { eq, count, sql } from "drizzle-orm";
+import { count, sql } from "drizzle-orm";
 import { administrativeUnits } from "~/db/schema";
 import type { Database, StatsResponse } from "~/types";
 
@@ -7,47 +7,20 @@ import type { Database, StatsResponse } from "~/types";
  * Returns counts for each type and total count
  */
 export async function getStats(db: Database): Promise<StatsResponse> {
-  // Execute individual queries for accurate counts
-  // Using Promise.all for parallel execution to improve performance
-  const [
-    totalResult,
-    provincesResult,
-    municipalitiesResult,
-    districtsResult,
-    communesResult,
-    villagesResult,
-  ] = await Promise.all([
-    db.select({ count: count() }).from(administrativeUnits),
-    db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(eq(administrativeUnits.type, "province")),
-    db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(eq(administrativeUnits.type, "municipality")),
-    db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(eq(administrativeUnits.type, "district")),
-    db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(eq(administrativeUnits.type, "commune")),
-    db
-      .select({ count: count() })
-      .from(administrativeUnits)
-      .where(eq(administrativeUnits.type, "village")),
-  ]);
+  const counts = await db
+    .select({ type: administrativeUnits.type, count: count() })
+    .from(administrativeUnits)
+    .groupBy(administrativeUnits.type);
+  const byType = new Map(counts.map((row) => [row.type, row.count]));
 
   return {
-    total: totalResult[0].count,
+    total: counts.reduce((total, row) => total + row.count, 0),
     byType: {
-      provinces: provincesResult[0].count,
-      municipalities: municipalitiesResult[0].count,
-      districts: districtsResult[0].count,
-      communes: communesResult[0].count,
-      villages: villagesResult[0].count,
+      provinces: byType.get("province") ?? 0,
+      municipalities: byType.get("municipality") ?? 0,
+      districts: byType.get("district") ?? 0,
+      communes: byType.get("commune") ?? 0,
+      villages: byType.get("village") ?? 0,
     },
     timestamp: new Date().toISOString(),
   };

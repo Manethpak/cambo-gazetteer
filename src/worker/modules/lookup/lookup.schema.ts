@@ -79,7 +79,7 @@ export const getLookupDoc: DescribeRouteOptions = {
       schema: errorResponseSchema,
     })
     .custom(429, {
-      description: "Rate limit exceeded (20 requests/minute for external origins)",
+      description: "Rate limit exceeded (20 requests/minute per IP per Cloudflare location)",
       schema: errorResponseSchema,
     })
     .build(),

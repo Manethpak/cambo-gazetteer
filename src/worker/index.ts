@@ -8,7 +8,14 @@ import lookupRouter from "./modules/lookup/lookup.route";
 import { openAPIRouteHandler } from "hono-openapi";
 import { Scalar } from "@scalar/hono-api-reference";
 
+import { rateLimit } from "~/utils/rate-limit";
+
 const app = new Hono<{ Bindings: Env }>();
+
+app.use("/api/*", rateLimit());
+app.use("/api/search", rateLimit("SEARCH_RATE_LIMITER"));
+app.use("/api/autocomplete", rateLimit("SEARCH_RATE_LIMITER"));
+app.use("/api/v1/lookup", rateLimit("LOOKUP_RATE_LIMITER"));
 
 app.route("/api", healthRouter);
 app.route("/api", statsRouter);

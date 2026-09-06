@@ -43,6 +43,8 @@ export const administrativeUnits = sqliteTable(
   },
   (table) => ({
     // Indexes for common query patterns
+    typeCodeIdx: index("type_code_idx").on(table.type, table.code),
+    typeParentCodeIdx: index("type_parent_code_idx").on(table.type, table.parentCode, table.code),
     typeIdx: index("type_idx").on(table.type),
     parentCodeIdx: index("parent_code_idx").on(table.parentCode),
     // Composite index for type + parent queries (get all districts in a province)
